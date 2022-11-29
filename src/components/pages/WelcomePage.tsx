@@ -93,7 +93,7 @@ const WelcomePage = (props: Props) => {
         <Title>Welcome to Grindery CDS</Title>
         <Desc>
           Grindery CDS allows you to create, clone and edit Connector
-          Description Schema files. .
+          Description Schema files.
         </Desc>
         <ConnectButton />
         <Disclaimer>

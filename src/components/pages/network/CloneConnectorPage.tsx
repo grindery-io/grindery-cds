@@ -155,7 +155,7 @@ const CloneConnectorPage = (props: Props) => {
               border: "1px solid #0b0d17",
             }}
             onClick={() => {
-              navigate(-1);
+              navigate("/");
             }}
           >
             Cancel

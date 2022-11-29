@@ -92,8 +92,8 @@ const WelcomePage = (props: Props) => {
         <Img src="/images/welcome.svg" alt="Welcome" />
         <Title>Welcome to Grindery CDS</Title>
         <Desc>
-          Grindery CDS allows you to create, clone and edit Nexus platform
-          connectors.
+          Grindery CDS allows you to create, clone and edit Connector
+          Description Schema files. .
         </Desc>
         <ConnectButton />
         <Disclaimer>

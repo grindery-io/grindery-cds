@@ -1,4 +1,4 @@
-# Grindery Network Frontend
+# Grindery CDS Frontend
 
 Live URL: [https://network.grindery.org/](https://network.grindery.org/)
 
@@ -24,9 +24,4 @@ To learn React, check out the [React documentation](https://reactjs.org/).
 
 ## Deployment
 
-The `master` branch is deployed automatically:
-
-1. Merge your changes into the `master` branch
-2. Push branch to GitHub
-
-**Deployment URL: https://network.grindery.org/**
+The `master` and `staging` branches are deployed automatically.

@@ -95,6 +95,7 @@ const OperationSettings = (props: Props) => {
       description: currentOperation?.display?.description || "",
       instructions: currentOperation?.display?.instructions || "",
       featured: Boolean(currentOperation?.display?.featured),
+      hidden: Boolean(currentOperation?.display?.hidden),
     },
     operation: currentOperation?.operation || {
       inputFields: !isEvm
@@ -125,6 +126,7 @@ const OperationSettings = (props: Props) => {
         description: _currentOperation?.display?.description || "",
         instructions: _currentOperation?.display?.instructions || "",
         featured: Boolean(_currentOperation?.display?.featured),
+        hidden: Boolean(_currentOperation?.display?.hidden),
       },
       operation: _currentOperation?.operation || {
         inputFields: !isEvm
@@ -255,6 +257,40 @@ const OperationSettings = (props: Props) => {
           <span>
             Featured {type} will be listed higher in the workflow builder UI
             then the rest.
+          </span>
+        </CheckboxLabel>
+      </CheckboxWrapper>
+
+      <CheckboxWrapper>
+        <CheckBox
+          isNetwork
+          checked={operation.display.hidden}
+          onChange={() => {
+            setError({ type: "", text: "" });
+            setOperation({
+              ...operation,
+              display: {
+                ...operation.display,
+                hidden: !operation.display.hidden,
+              },
+            });
+          }}
+        />
+        <CheckboxLabel
+          onClick={() => {
+            setError({ type: "", text: "" });
+            setOperation({
+              ...operation,
+              display: {
+                ...operation.display,
+                hidden: !operation.display.hidden,
+              },
+            });
+          }}
+        >
+          Hidden{" "}
+          <span>
+            Hidden {type} will not be listed in the workflow builder UI.
           </span>
         </CheckboxLabel>
       </CheckboxWrapper>

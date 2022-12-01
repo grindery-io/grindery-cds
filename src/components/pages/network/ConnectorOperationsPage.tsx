@@ -103,6 +103,7 @@ const ConnectorOperationsPage = (props: Props) => {
                 <TableHeaderColumn>Label</TableHeaderColumn>
                 <TableHeaderColumn>Key</TableHeaderColumn>
                 <TableHeaderColumn>Featured</TableHeaderColumn>
+                <TableHeaderColumn>Hidden</TableHeaderColumn>
                 <TableHeaderColumn></TableHeaderColumn>
               </tr>
             </TableHeader>

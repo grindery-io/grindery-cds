@@ -48,6 +48,14 @@ type ContextProps = {
     inputData: any
   ) => void;
   onInputFieldDelete: (key: string, type: any, inputKey: string) => void;
+  onOutputFieldSave: (
+    key: string,
+    type: any,
+    inputKey: string,
+    inputData: any,
+    sample: string
+  ) => void;
+  onOutputFieldDelete: (key: string, type: any, inputKey: string) => void;
 };
 
 type ConnectorContextProps = {
@@ -83,6 +91,8 @@ const defaultContext = {
   onOperationDelete: () => {},
   onInputFieldSave: () => {},
   onInputFieldDelete: () => {},
+  onOutputFieldSave: () => {},
+  onOutputFieldDelete: () => {},
 };
 
 export const ConnectorContext = createContext<ContextProps>(defaultContext);
@@ -625,6 +635,153 @@ export const ConnectorContextProvider = ({
     });
   };
 
+  const onOutputFieldSave = (
+    key: string,
+    type: any,
+    inputKey: string,
+    inputData: any,
+    sample: string
+  ) => {
+    if (state.connector?.values?.status?.name === "Published") {
+      setState({
+        isSaving: false,
+        snackbar: {
+          opened: true,
+          message: NOT_ALLOWED,
+          severity: "error",
+          duration: 5000,
+          onClose: () => {
+            setState({
+              snackbar: {
+                opened: false,
+                message: "",
+                severity: "error",
+                onClose: () => {},
+              },
+            });
+          },
+        },
+      });
+      return;
+    }
+    navigate(`/connector/${state.id}/${type}/${key}/outputFields`);
+    if (type) {
+      setState({
+        cds: {
+          ...state.cds,
+          [type]: [
+            ...((state.cds?.[type] || []).map((op: any) => {
+              if (op.key === key) {
+                return {
+                  ...op,
+                  operation: {
+                    ...op.operation,
+                    outputFields: [
+                      ...(op.operation?.outputFields?.map((field: any) => {
+                        if (field.key === inputKey) {
+                          return {
+                            ...field,
+                            ...inputData,
+                          };
+                        } else {
+                          return field;
+                        }
+                      }) || []),
+                      ...(inputKey === "__new__" ? [{ ...inputData }] : []),
+                    ],
+                    sample: {
+                      ...op.operation?.sample,
+                      [inputKey === "__new__" ? inputData.key : inputKey]:
+                        sample,
+                    },
+                  },
+                };
+              } else {
+                return op;
+              }
+            }) || []),
+          ],
+        },
+      });
+    }
+  };
+
+  const onOutputFieldDelete = (key: string, type: any, inputKey: string) => {
+    if (state.connector?.values?.status?.name === "Published") {
+      setState({
+        isSaving: false,
+        snackbar: {
+          opened: true,
+          message: NOT_ALLOWED,
+          severity: "error",
+          duration: 5000,
+          onClose: () => {
+            setState({
+              snackbar: {
+                opened: false,
+                message: "",
+                severity: "error",
+                onClose: () => {},
+              },
+            });
+          },
+        },
+      });
+      return;
+    }
+    setState({
+      confirm: {
+        message: "Are you sure you want to delete the output field?",
+        opened: true,
+        onClose: () => {
+          setState({
+            confirm: {
+              opened: false,
+              message: "",
+              onClose: () => {},
+              onConfirm: () => {},
+            },
+          });
+        },
+        onConfirm: () => {
+          if (type) {
+            setState({
+              cds: {
+                ...state.cds,
+                [type]: [
+                  ...((state.cds?.[type] || [])?.map((op: any) => {
+                    if (op.key === key) {
+                      const sample = {
+                        ...op.operation?.sample,
+                      };
+                      delete sample[inputKey];
+                      return {
+                        ...op,
+                        operation: {
+                          ...op.operation,
+                          outputFields: [
+                            ...(op.operation?.outputFields?.filter(
+                              (field: any) => field.key !== inputKey
+                            ) || []),
+                          ],
+                          sample: {
+                            ...sample,
+                          },
+                        },
+                      };
+                    } else {
+                      return op;
+                    }
+                  }) || []),
+                ],
+              },
+            });
+          }
+        },
+      },
+    });
+  };
+
   useEffect(() => {
     setCount((count) => count + 1);
     saveConnector();
@@ -647,6 +804,8 @@ export const ConnectorContextProvider = ({
         onOperationDelete,
         onInputFieldSave,
         onInputFieldDelete,
+        onOutputFieldSave,
+        onOutputFieldDelete,
       }}
     >
       {children}

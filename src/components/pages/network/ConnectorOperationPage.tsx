@@ -7,11 +7,13 @@ import OperationFieldsEditor from "../../network/OperationFieldsEditor";
 import useConnectorContext from "../../../hooks/useConnectorContext";
 import OperationSettings from "../../network/OperationSettings";
 import OperationMethod from "../../network/OperationMethod";
+import OperationOutput from "../../network/OperationOutput";
 
 const TABS = [
   { key: "settings", value: 0, title: "Settings" },
   { key: "operation", value: 1, title: "Operation" },
   { key: "inputFields", value: 2, title: "Input Fields" },
+  { key: "outputFields", value: 3, title: "Output Fields" },
 ];
 
 const Title = styled.h3`
@@ -113,6 +115,7 @@ const ConnectorOperationPage = (props: Props) => {
       {tab === "settings" && <OperationSettings />}
       {tab === "operation" && <OperationMethod />}
       {tab === "inputFields" && <OperationFieldsEditor />}
+      {tab === "outputFields" && <OperationOutput />}
     </div>
   ) : (
     <>

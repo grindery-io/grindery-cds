@@ -1,10 +1,17 @@
-# Grindery CDS Frontend
+# Grindery CDS
+
+<p align="center">
+    <img src="./public/images/welcome.svg?raw=true" alt="Grindery CDS welcome image" />
+</p>
+
+Grindery CDS allows you to create, clone and edit Nexus platform
+connectors.
 
 Live URL: [https://network.grindery.org/](https://network.grindery.org/)
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Development
 
-## Available Scripts
+This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 In the project directory, you can run:
 

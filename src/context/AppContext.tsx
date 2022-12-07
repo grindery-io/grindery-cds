@@ -282,7 +282,7 @@ export const AppContextProvider = ({ children }: AppContextProps) => {
 
   const verifyUser = async () => {
     setVerifying(true);
-    const res = await client?.isAllowedUser().catch((err) => {
+    const res = await client?.isAllowedUser("cds").catch((err) => {
       console.error("isAllowedUser error:", err.message);
       setAccessAllowed(false);
     });

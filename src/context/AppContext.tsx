@@ -59,6 +59,9 @@ type ContextProps = {
   ) => void;
   getConnector: (key: string) => void;
   evmChains: Chain[];
+  isOptedIn: boolean;
+  chekingOptIn: boolean;
+  setIsOptedIn: (a: boolean) => void;
 };
 
 type AppContextProps = {
@@ -92,6 +95,9 @@ export const AppContext = createContext<ContextProps>({
   moveWorkflowToWorkspace: defaultFunc,
   getConnector: defaultFunc,
   evmChains: [],
+  isOptedIn: false,
+  chekingOptIn: true,
+  setIsOptedIn: () => {},
 });
 
 export const AppContextProvider = ({ children }: AppContextProps) => {
@@ -106,6 +112,10 @@ export const AppContextProvider = ({ children }: AppContextProps) => {
   const [devMode, setDevMode] = useState(cachedDevMode === "true");
 
   const [evmChains, setEvmChains] = useState<Chain[]>([]);
+
+  const [isOptedIn, setIsOptedIn] = useState<boolean>(false);
+
+  const [chekingOptIn, setChekingOptIn] = useState<boolean>(true);
 
   // Auth hook
   const { user, disconnect, token } = useGrinderyNexus();
@@ -288,9 +298,19 @@ export const AppContextProvider = ({ children }: AppContextProps) => {
     });
     if (res) {
       setAccessAllowed(true);
+      const optinRes = await client?.isAllowedUser().catch((err) => {
+        console.error("isAllowedUser error:", err.message);
+        setIsOptedIn(false);
+      });
+      if (optinRes) {
+        setIsOptedIn(true);
+      } else {
+        setIsOptedIn(false);
+      }
     } else {
       setAccessAllowed(false);
     }
+    setChekingOptIn(false);
     setVerifying(false);
   };
 
@@ -474,6 +494,9 @@ export const AppContextProvider = ({ children }: AppContextProps) => {
         moveWorkflowToWorkspace,
         getConnector,
         evmChains,
+        isOptedIn,
+        chekingOptIn,
+        setIsOptedIn,
       }}
     >
       {children}

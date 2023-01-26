@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import { Dialog, CircularProgress } from "grindery-ui";
 import Button from "../../network/Button";
@@ -126,6 +126,18 @@ const ConnectorPublishingPage = (props: Props) => {
   const hasTriggers = cds.triggers && cds.triggers.length > 0;
   const hasActions = cds.actions && cds.actions.length > 0;
 
+  useEffect(() => {
+    if (!cds?.access) {
+      setState({
+        cds: {
+          ...state.cds,
+          access: "Private",
+        },
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [cds?.access]);
+
   return id ? (
     <div>
       <Title>Publishing</Title>
@@ -170,7 +182,7 @@ const ConnectorPublishingPage = (props: Props) => {
                 />
               )}
 
-              <RadioButton
+              {/*<RadioButton
                 label="Public"
                 selected={!cds?.access || cds?.access === "Public"}
                 onChange={() => {
@@ -182,7 +194,7 @@ const ConnectorPublishingPage = (props: Props) => {
                   });
                 }}
                 description="Connector will be available for all Nexus users"
-              />
+              />*/}
             </RadioWrapper>
           </CardContent>
         </Card>

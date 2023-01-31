@@ -5,6 +5,7 @@ import { Autocomplete, RichInput } from "grindery-ui";
 import { StateProps } from "./ConnectorSubmission";
 import Button from "./Button";
 import useNetworkContext from "../../hooks/useNetworkContext";
+import { useNavigate } from "react-router";
 
 const Container = styled.div`
   max-width: 816px;
@@ -29,6 +30,12 @@ const Title = styled.h1`
 const ButtonWrapper = styled.div`
   margin: 32px 0 0;
   text-align: center;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: nowrap;
+  gap: 15px;
 `;
 
 type Props = {
@@ -38,6 +45,7 @@ type Props = {
 };
 
 const ConnectorSubmissionStep0 = (props: Props) => {
+  let navigate = useNavigate();
   const { state, setState, onSubmit } = props;
   const {
     state: { blockchains },
@@ -92,6 +100,18 @@ const ConnectorSubmissionStep0 = (props: Props) => {
       />
 
       <ButtonWrapper>
+        <Button
+          style={{
+            background: "transparent",
+            border: "1px solid #ffb930",
+            padding: "11px 24px",
+          }}
+          onClick={() => {
+            navigate(`/`);
+          }}
+        >
+          Cancel
+        </Button>
         <Button onClick={onSubmit}>Continue</Button>
       </ButtonWrapper>
     </Container>

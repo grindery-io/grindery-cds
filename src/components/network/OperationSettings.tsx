@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import styled from "styled-components";
 import { RichInput } from "grindery-ui";
 import Button from "./Button";
@@ -28,6 +28,12 @@ const ButtonsWrapper = styled.div`
 
 const ButtonsRight = styled.div`
   margin-left: auto;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
+  flex-wrap: nowrap;
+  gap: 15px;
 `;
 
 const CheckboxWrapper = styled.div`
@@ -64,6 +70,7 @@ const CheckboxLabel = styled.label`
 type Props = {};
 
 const OperationSettings = (props: Props) => {
+  let navigate = useNavigate();
   let { key, type } = useParams();
   const { state, onOperationSettingsSave } = useConnectorContext();
   const [error, setError] = useState({ type: "", text: "" });
@@ -297,6 +304,19 @@ const OperationSettings = (props: Props) => {
 
       <ButtonsWrapper>
         <ButtonsRight>
+          <Button
+            style={{
+              background: "transparent",
+              border: "1px solid #ffb930",
+              padding: "11px 24px",
+            }}
+            onClick={() => {
+              navigate(`/connector/${cds?.key}/${type}`);
+            }}
+          >
+            Cancel
+          </Button>
+
           <Button
             onClick={() => {
               setError({ type: "", text: "" });

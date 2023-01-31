@@ -107,9 +107,9 @@ const Link = styled.p`
   }
 `;
 
-const AppsMenuWrapper = styled.div`
+/*const AppsMenuWrapper = styled.div`
   margin-left: auto;
-`;
+`;*/
 
 const ConnectWrapper = styled.div`
   & button {
@@ -180,9 +180,9 @@ const NetworkHeader = (props: Props) => {
             </Link>
           </LinksMenu>
         )}
-        <AppsMenuWrapper>
+        {/*<AppsMenuWrapper>
           <AppsMenu apps={GRINDERY_APPS} dark />
-        </AppsMenuWrapper>
+            </AppsMenuWrapper>*/}
         {!user && (
           <ConnectWrapper>
             <button

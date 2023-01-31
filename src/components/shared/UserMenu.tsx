@@ -8,6 +8,8 @@ import { useGrinderyNexus } from "use-grindery-nexus";
 import { Snackbar } from "grindery-ui";
 import { useNavigate } from "react-router-dom";
 import useWorkspaceContext from "../../hooks/useWorkspaceContext";
+import useAppContext from "../../hooks/useAppContext";
+import AccountModal from "./AccountModal";
 
 const UserContainer = styled.div`
   position: relative;
@@ -125,11 +127,13 @@ type Props = {
 
 const UserMenu = (props: Props) => {
   const mode = props.mode || "light";
+  const { userEmail } = useAppContext();
   const { address, disconnect } = useGrinderyNexus();
   const [menuOpened, setMenuOpened] = useState(false);
   const { workspace } = useWorkspaceContext();
   const [copied, setCopied] = useState(false);
   let navigate = useNavigate();
+  const [accountOpened, setAccountOpened] = useState(false);
 
   return address ? (
     <UserContainer>
@@ -181,6 +185,16 @@ const UserMenu = (props: Props) => {
                 <span>Manage Workspace</span>
               </button>
             )}
+            {userEmail && (
+              <button
+                onClick={() => {
+                  setAccountOpened(true);
+                }}
+              >
+                <img src={ICONS.ACCOUNT} alt="" />
+                <span>Account details</span>
+              </button>
+            )}
             <button
               onClick={() => {
                 disconnect();
@@ -202,6 +216,14 @@ const UserMenu = (props: Props) => {
         autoHideDuration={2000}
         severity="success"
       />
+      {userEmail && (
+        <AccountModal
+          open={accountOpened}
+          onClose={() => {
+            setAccountOpened(false);
+          }}
+        />
+      )}
     </UserContainer>
   ) : null;
 };

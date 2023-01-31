@@ -62,6 +62,8 @@ type ContextProps = {
   isOptedIn: boolean;
   chekingOptIn: boolean;
   setIsOptedIn: (a: boolean) => void;
+  userEmail: string;
+  setUserEmail: (a: string) => void;
 };
 
 type AppContextProps = {
@@ -98,6 +100,8 @@ export const AppContext = createContext<ContextProps>({
   isOptedIn: false,
   chekingOptIn: true,
   setIsOptedIn: () => {},
+  userEmail: "",
+  setUserEmail: () => {},
 });
 
 export const AppContextProvider = ({ children }: AppContextProps) => {
@@ -147,6 +151,8 @@ export const AppContextProvider = ({ children }: AppContextProps) => {
   const [workflowExecutions, setWorkflowExecutions] = useState<
     WorkflowExecutionLog[][]
   >([]);
+
+  const [userEmail, setUserEmail] = useState("");
 
   // list of apps used in workflows
   const [apps, setApps] = useState<any[]>([]);
@@ -297,6 +303,11 @@ export const AppContextProvider = ({ children }: AppContextProps) => {
       setAccessAllowed(false);
     });
     if (res) {
+      const email = await client?.getUserEmail().catch((err) => {
+        console.error("getUserEmail error:", err.message);
+        setUserEmail("");
+      });
+      setUserEmail(email || "");
       setAccessAllowed(true);
       const optinRes = await client?.isAllowedUser().catch((err) => {
         console.error("isAllowedUser error:", err.message);
@@ -497,6 +508,8 @@ export const AppContextProvider = ({ children }: AppContextProps) => {
         isOptedIn,
         chekingOptIn,
         setIsOptedIn,
+        userEmail,
+        setUserEmail,
       }}
     >
       {children}

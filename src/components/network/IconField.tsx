@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Tooltip } from "grindery-ui";
 import styled from "styled-components";
 import FileBase64 from "react-file-base64";
+import { getImageDimensions } from "../../helpers/utils";
 
 const Container = styled.div`
   margin: 0 0 20px;
@@ -121,12 +122,28 @@ const IconField = (props: Props) => {
   const [key, setKey] = useState(0);
   const [validation, setValidation] = useState("");
 
-  const onFilesReady = (file: any) => {
+  const onFilesReady = async (file: any) => {
     setValidation("");
     if (file && file.base64) {
       const type = file.type?.split("/") || [];
       if (type[0] === "image") {
-        setIcon(file.base64);
+        const sizes = await getImageDimensions(file.base64).catch((error) => {
+          setIcon("");
+          setKey(key + 1);
+          setValidation(
+            "We couldn't check the image size. Please, try another image. Recommended icon size is 48x48 pixels."
+          );
+          return;
+        });
+        if (sizes && sizes.width <= 64 && sizes.height <= 64) {
+          setIcon(file.base64);
+        } else {
+          setIcon("");
+          setKey(key + 1);
+          setValidation(
+            "Image is too big. Recommended icon size is 48x48 pixels."
+          );
+        }
       } else {
         setIcon("");
         setKey(key + 1);

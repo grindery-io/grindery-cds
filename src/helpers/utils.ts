@@ -157,3 +157,18 @@ export const getValidationScheme = (inputFields: Field[]) => {
 
   return schema;
 };
+
+export const getImageDimensions = async (
+  base64: string
+): Promise<{ width: number; height: number }> => {
+  const img = new Image();
+  img.src = base64;
+  return new Promise((resolve) => {
+    img.addEventListener("load", function () {
+      resolve({
+        width: img.width,
+        height: img.height,
+      });
+    });
+  });
+};

@@ -141,7 +141,8 @@ const ConnectorSubmission = (props: Props) => {
             v.data &&
             v.data.result &&
             v.data.result !== "Invalid Address format" &&
-            v.data.result !== "Max rate limit reached"
+            v.data.result !== "Max rate limit reached" &&
+            v.data.result !== "Contract source not verified"
           ) {
             setState({
               loading: false,

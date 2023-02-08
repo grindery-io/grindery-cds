@@ -144,6 +144,19 @@ const ConnectorSubmission = (props: Props) => {
             v.data.result !== "Max rate limit reached" &&
             v.data.result !== "Contract source not verified"
           ) {
+            try {
+              JSON.parse((v && v.data && v.data.result) || "");
+            } catch (err: any) {
+              setState({
+                loading: false,
+                form: {
+                  ...state.form,
+                  entry: { ...state.form.entry, abi: "" },
+                },
+                step: 1,
+              });
+              return;
+            }
             setState({
               loading: false,
               form: {

@@ -80,7 +80,7 @@ const Disclaimer = styled.div`
   text-align: center;
   color: #dcdcdc;
   max-width: 500px;
-  margin: 20px auto 0;
+  margin: 10px auto 0;
 `;
 
 type Props = {};
@@ -100,14 +100,6 @@ const WelcomePage = (props: Props) => {
           Grindery CDS uses{" "}
           <a href="https://metamask.io/" target="_blank" rel="noreferrer">
             MetaMask
-          </a>{" "}
-          and{" "}
-          <a
-            href="https://developers.flow.com/tools/fcl-js"
-            target="_blank"
-            rel="noreferrer"
-          >
-            Flow Client Library
           </a>{" "}
           to authenticate users.
         </Disclaimer>

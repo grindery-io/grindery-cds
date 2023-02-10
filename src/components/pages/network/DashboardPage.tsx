@@ -5,6 +5,7 @@ import useNetworkContext from "../../../hooks/useNetworkContext";
 import Button from "../../network/Button";
 import { useNavigate } from "react-router";
 import ConnectorRow from "../../network/ConnectorRow";
+import useWorkspaceContext from "../../../hooks/useWorkspaceContext";
 
 const Container = styled.div`
   padding: 75px 20px 0;
@@ -68,6 +69,11 @@ type Props = {};
 const DashboardPage = (props: Props) => {
   let navigate = useNavigate();
   const { state, refreshConnectors } = useNetworkContext();
+  const { workspace, workspaces } = useWorkspaceContext();
+  const currentWorkspace =
+    workspace === "personal"
+      ? workspace
+      : workspaces.find((ws) => ws.key === workspace);
 
   useEffect(() => {
     refreshConnectors();
@@ -120,7 +126,20 @@ const DashboardPage = (props: Props) => {
               </>
             ) : (
               <>
-                <p>You have not created any connectors yet.</p>
+                {currentWorkspace && (
+                  <h3>
+                    Welcome to{" "}
+                    {currentWorkspace === "personal"
+                      ? "your personal"
+                      : `the ${currentWorkspace.title}`}{" "}
+                    workspace.
+                  </h3>
+                )}
+                <p>
+                  There is no connectors associated to this workspace, please
+                  click on the "create connector" button to add items to the
+                  list.
+                </p>
               </>
             )}
           </>

@@ -30,9 +30,7 @@ const ConnectorEditPage = (props: Props) => {
   const { state } = useNetworkContext();
 
   const { connectors, connectorsLoading } = state;
-  const connector = connectors.find(
-    (c) => id && JSON.parse(c?.values?.cds)?.key === id
-  );
+  const connector = connectors.find((c) => id && c?.key === id);
 
   if (connectorsLoading) {
     return (

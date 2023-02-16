@@ -121,9 +121,8 @@ const ConnectorHomePage = (props: Props) => {
           <CardContent>
             <CardTitle>Publish</CardTitle>
             <CardDescription>
-              Publish your connector when you are ready. You can keep it private
-              to yourself, your workspace, or you can share it with all users of
-              the Nexus.
+              Publish your connector when you are ready. Publishing requires
+              Grindery approval.
             </CardDescription>
           </CardContent>
           <CardCTA>

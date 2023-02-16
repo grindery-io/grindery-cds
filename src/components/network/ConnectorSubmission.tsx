@@ -309,7 +309,8 @@ const ConnectorSubmission = (props: Props) => {
       res = await axios.post(
         `${CDS_EDITOR_API_ENDPOINT}/cds`,
         {
-          data: state.form,
+          cds: state.form.entry.cds,
+          username: state.form.contributor.username,
           environment: isLocalOrStaging ? "staging" : "production",
         },
         {

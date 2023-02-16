@@ -5,8 +5,7 @@ import { useGrinderyNexus } from "use-grindery-nexus";
 import { isLocalOrStaging } from "../constants";
 import useWorkspaceContext from "../hooks/useWorkspaceContext";
 
-const CDS_EDITOR_API_ENDPOINT =
-  "https://nexus-cds-editor-api.herokuapp.com/api";
+const CDS_EDITOR_API_ENDPOINT = "http://localhost:5000/api/v1";
 
 type StateProps = {
   connectors: any[];
@@ -25,7 +24,7 @@ type StateProps = {
 
 type ContextProps = {
   state: StateProps;
-  refreshConnectors: () => Promise<{ success: boolean }>;
+  refreshConnectors: (cds?: any) => Promise<{ success: boolean }>;
   cloneConnector: (cds: any) => Promise<string>;
   connectContributor: (code: string) => void;
   deleteConnector: (key: string) => void;
@@ -99,47 +98,53 @@ export const NetworkContextProvider = ({ children }: NetworkContextProps) => {
         console.error("getConnectors error", err);
       }
       setState({
-        connectors:
-          res?.data?.result?.filter(
-            (connector: any) =>
-              ((!workspace || workspace === "personal") &&
-                !connector?.values?.workspace) ||
-              (workspace && workspace !== "personal")
-          ) || [],
+        connectors: res?.data?.result || [],
         connectorsLoading: false,
       });
     }
   };
 
-  const refreshConnectors = async () => {
-    if (!token?.access_token && !workspaceToken) {
-      return { success: false };
-    } else {
-      let res;
-      try {
-        res = await axios.get(
-          `${CDS_EDITOR_API_ENDPOINT}/cds?environment=${
-            isLocalOrStaging ? "staging" : "production"
-          }`,
-          {
-            headers: {
-              Authorization: `Bearer ${workspaceToken || token?.access_token}`,
-            },
-          }
-        );
-      } catch (err) {
-        console.error("getConnectors error", err);
-        return { success: false };
-      }
+  const refreshConnectors = async (cds?: any) => {
+    if (cds) {
       setState({
-        connectors:
-          res?.data?.result?.filter(
-            (connector: any) =>
-              (workspace === "personal" && !connector?.values?.workspace) ||
-              workspace !== "personal"
-          ) || [],
+        connectors: [
+          ...state.connectors.map((c) => {
+            if (c.key !== cds.key) {
+              return c;
+            } else {
+              return cds;
+            }
+          }),
+        ],
       });
       return { success: true };
+    } else {
+      if (!token?.access_token && !workspaceToken) {
+        return { success: false };
+      } else {
+        let res;
+        try {
+          res = await axios.get(
+            `${CDS_EDITOR_API_ENDPOINT}/cds?environment=${
+              isLocalOrStaging ? "staging" : "production"
+            }`,
+            {
+              headers: {
+                Authorization: `Bearer ${
+                  workspaceToken || token?.access_token
+                }`,
+              },
+            }
+          );
+        } catch (err) {
+          console.error("getConnectors error", err);
+          return { success: false };
+        }
+        setState({
+          connectors: res?.data?.result || [],
+        });
+        return { success: true };
+      }
     }
   };
 

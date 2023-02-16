@@ -9,8 +9,7 @@ import useNetworkContext from "../hooks/useNetworkContext";
 
 export const NOT_ALLOWED = `Published connector can't be updated. You can clone the connector and create a new version.`;
 
-const CDS_EDITOR_API_ENDPOINT =
-  "https://nexus-cds-editor-api.herokuapp.com/api";
+const CDS_EDITOR_API_ENDPOINT = "http://localhost:5000/api/v1";
 
 type StateProps = {
   id: string;
@@ -106,7 +105,7 @@ export const ConnectorContextProvider = ({
   const { refreshConnectors } = useNetworkContext();
   let navigate = useNavigate();
   const [count, setCount] = useState(0);
-  const cds = JSON.parse(connector?.values?.cds || {});
+  const cds = connector || {};
   const [state, setState] = useReducer(
     (state: StateProps, newState: Partial<StateProps>) => ({
       ...state,
@@ -133,8 +132,8 @@ export const ConnectorContextProvider = ({
     }
   );
 
-  const saveConnector = async () => {
-    if (state.connector?.values?.status?.name === "Published") {
+  const checkStatus = () => {
+    if (!state.cds.access || state.cds.access === "Public") {
       setState({
         isSaving: false,
         snackbar: {
@@ -154,8 +153,63 @@ export const ConnectorContextProvider = ({
           },
         },
       });
+      return false;
+    }
+    return true;
+  };
+
+  const showError = (err: any) => {
+    setState({
+      isSaving: false,
+      snackbar: {
+        opened: true,
+        message: `Saving failed. ${
+          err?.response?.data?.message ||
+          err?.response?.data?.error ||
+          err?.message ||
+          "Please, try again later"
+        }.`,
+        severity: "error",
+        duration: 5000,
+        onClose: () => {
+          setState({
+            snackbar: {
+              opened: false,
+              message: "",
+              severity: "error",
+              onClose: () => {},
+            },
+          });
+        },
+      },
+    });
+  };
+
+  const showSuccess = (message: string) => {
+    setState({
+      snackbar: {
+        opened: true,
+        message,
+        severity: "success",
+        onClose: () => {
+          setState({
+            snackbar: {
+              opened: false,
+              message: "",
+              severity: "success",
+              onClose: () => {},
+            },
+          });
+        },
+      },
+    });
+  };
+
+  const saveConnector = async () => {
+    if (!checkStatus()) {
       return;
     }
+
     if (count > 0) {
       setState({
         isSaving: true,
@@ -165,7 +219,6 @@ export const ConnectorContextProvider = ({
         await axios.patch(
           `${CDS_EDITOR_API_ENDPOINT}/cds`,
           {
-            id: state.connector.id,
             cds: JSON.stringify(state.cds),
             environment: isLocalOrStaging ? "staging" : "production",
           },
@@ -177,58 +230,19 @@ export const ConnectorContextProvider = ({
         );
       } catch (err: any) {
         console.error("saveConnector error => ", err.message);
-
-        setState({
-          isSaving: false,
-          snackbar: {
-            opened: true,
-            message: `Saving failed. ${
-              err?.response?.data?.message ||
-              err?.response?.data?.error ||
-              err?.message ||
-              "Please, try again later"
-            }.`,
-            severity: "error",
-            duration: 5000,
-            onClose: () => {
-              setState({
-                snackbar: {
-                  opened: false,
-                  message: "",
-                  severity: "error",
-                  onClose: () => {},
-                },
-              });
-            },
-          },
-        });
+        showError(err);
         return;
       }
-
       setState({
         isSaving: false,
-        snackbar: {
-          opened: true,
-          message: `Connector saved`,
-          severity: "success",
-          onClose: () => {
-            setState({
-              snackbar: {
-                opened: false,
-                message: "",
-                severity: "success",
-                onClose: () => {},
-              },
-            });
-          },
-        },
       });
-      refreshConnectors();
+      showSuccess("Connector saved");
+      refreshConnectors(state.cds);
     }
   };
 
   const publishConnector = async () => {
-    if (state.connector?.values?.status?.name === "Published") {
+    /*if (state.connector?.values?.status?.name === "Published") {
       setState({
         isSaving: false,
         snackbar: {
@@ -326,32 +340,14 @@ export const ConnectorContextProvider = ({
           });
         },
       },
-    });
+    });*/
   };
 
   const onConnectorSettingsSave = (data: any) => {
-    if (state.connector?.values?.status?.name === "Published") {
-      setState({
-        isSaving: false,
-        snackbar: {
-          opened: true,
-          message: NOT_ALLOWED,
-          severity: "error",
-          duration: 5000,
-          onClose: () => {
-            setState({
-              snackbar: {
-                opened: false,
-                message: "",
-                severity: "error",
-                onClose: () => {},
-              },
-            });
-          },
-        },
-      });
+    if (!checkStatus()) {
       return;
     }
+
     if (data) {
       setState({
         cds: {
@@ -359,48 +355,16 @@ export const ConnectorContextProvider = ({
           name: data.name,
           icon: data.icon,
           description: data.description,
-        },
-        snackbar: {
-          opened: true,
-          message: `Connector saved`,
-          severity: "success",
-          onClose: () => {
-            setState({
-              snackbar: {
-                opened: false,
-                message: "",
-                severity: "success",
-                onClose: () => {},
-              },
-            });
-          },
+          access: data.access,
         },
       });
+      showSuccess("Connector saved");
       navigate(`/connector/${state.id}`);
     }
   };
 
   const onOperationSettingsSave = (type: any, operation: any) => {
-    if (state.connector?.values?.status?.name === "Published") {
-      setState({
-        isSaving: false,
-        snackbar: {
-          opened: true,
-          message: NOT_ALLOWED,
-          severity: "error",
-          duration: 5000,
-          onClose: () => {
-            setState({
-              snackbar: {
-                opened: false,
-                message: "",
-                severity: "error",
-                onClose: () => {},
-              },
-            });
-          },
-        },
-      });
+    if (!checkStatus()) {
       return;
     }
     if (type) {
@@ -421,21 +385,6 @@ export const ConnectorContextProvider = ({
             ];
         setState({
           cds: { ...state.cds, [type]: [...operations] },
-          snackbar: {
-            opened: true,
-            message: `${type === "triggers" ? "Trigger" : "Action"} saved`,
-            severity: "success",
-            onClose: () => {
-              setState({
-                snackbar: {
-                  opened: false,
-                  message: "",
-                  severity: "success",
-                  onClose: () => {},
-                },
-              });
-            },
-          },
         });
         navigate(
           `/connector/${state.id}/${type}/${operation.key}/${
@@ -447,26 +396,7 @@ export const ConnectorContextProvider = ({
   };
 
   const onOperationDelete = (type: any, operationKey: string) => {
-    if (state.connector?.values?.status?.name === "Published") {
-      setState({
-        isSaving: false,
-        snackbar: {
-          opened: true,
-          message: NOT_ALLOWED,
-          severity: "error",
-          duration: 5000,
-          onClose: () => {
-            setState({
-              snackbar: {
-                opened: false,
-                message: "",
-                severity: "error",
-                onClose: () => {},
-              },
-            });
-          },
-        },
-      });
+    if (!checkStatus()) {
       return;
     }
     setState({
@@ -507,26 +437,7 @@ export const ConnectorContextProvider = ({
     inputKey: string,
     inputData: any
   ) => {
-    if (state.connector?.values?.status?.name === "Published") {
-      setState({
-        isSaving: false,
-        snackbar: {
-          opened: true,
-          message: NOT_ALLOWED,
-          severity: "error",
-          duration: 5000,
-          onClose: () => {
-            setState({
-              snackbar: {
-                opened: false,
-                message: "",
-                severity: "error",
-                onClose: () => {},
-              },
-            });
-          },
-        },
-      });
+    if (!checkStatus()) {
       return;
     }
     navigate(`/connector/${state.id}/${type}/${key}/inputFields`);
@@ -567,28 +478,10 @@ export const ConnectorContextProvider = ({
   };
 
   const onInputFieldDelete = (key: string, type: any, inputKey: string) => {
-    if (state.connector?.values?.status?.name === "Published") {
-      setState({
-        isSaving: false,
-        snackbar: {
-          opened: true,
-          message: NOT_ALLOWED,
-          severity: "error",
-          duration: 5000,
-          onClose: () => {
-            setState({
-              snackbar: {
-                opened: false,
-                message: "",
-                severity: "error",
-                onClose: () => {},
-              },
-            });
-          },
-        },
-      });
+    if (!checkStatus()) {
       return;
     }
+
     setState({
       confirm: {
         message: "Are you sure you want to delete the input field?",
@@ -642,28 +535,10 @@ export const ConnectorContextProvider = ({
     inputData: any,
     sample: string
   ) => {
-    if (state.connector?.values?.status?.name === "Published") {
-      setState({
-        isSaving: false,
-        snackbar: {
-          opened: true,
-          message: NOT_ALLOWED,
-          severity: "error",
-          duration: 5000,
-          onClose: () => {
-            setState({
-              snackbar: {
-                opened: false,
-                message: "",
-                severity: "error",
-                onClose: () => {},
-              },
-            });
-          },
-        },
-      });
+    if (!checkStatus()) {
       return;
     }
+
     navigate(`/connector/${state.id}/${type}/${key}/outputFields`);
     if (type) {
       setState({
@@ -707,26 +582,7 @@ export const ConnectorContextProvider = ({
   };
 
   const onOutputFieldDelete = (key: string, type: any, inputKey: string) => {
-    if (state.connector?.values?.status?.name === "Published") {
-      setState({
-        isSaving: false,
-        snackbar: {
-          opened: true,
-          message: NOT_ALLOWED,
-          severity: "error",
-          duration: 5000,
-          onClose: () => {
-            setState({
-              snackbar: {
-                opened: false,
-                message: "",
-                severity: "error",
-                onClose: () => {},
-              },
-            });
-          },
-        },
-      });
+    if (!checkStatus()) {
       return;
     }
     setState({

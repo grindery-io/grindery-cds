@@ -80,7 +80,7 @@ const ConnectorRow = (props: Props) => {
   const { deleteConnector } = useNetworkContext();
   let navigate = useNavigate();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const cds = JSON.parse(connector?.values?.cds || "");
+  const cds = connector;
   const [confirm, setConfirm] = useState({
     message: "",
     opened: false,
@@ -116,7 +116,7 @@ const ConnectorRow = (props: Props) => {
     },
   ];
 
-  if (connector?.values?.status?.name !== "Published") {
+  /*if (connector?.values?.status?.name !== "Published") {
     menuItems.push({
       key: "delete",
       label: "Delete",
@@ -144,7 +144,7 @@ const ConnectorRow = (props: Props) => {
         });
       },
     });
-  }
+  }*/
 
   return (
     <Row key={cds.key}>
@@ -167,7 +167,7 @@ const ConnectorRow = (props: Props) => {
         <ConnectorName>{cds?.name || cds.key}</ConnectorName>
       </Column>
       <Column style={{ textAlign: "right" }}>
-        <ConnectorContributor contributor={connector.values?.contributor} />
+        <ConnectorContributor contributor={connector.contributor} />
       </Column>
       <Column
         style={{ textAlign: "right" }}
@@ -176,16 +176,6 @@ const ConnectorRow = (props: Props) => {
         }}
       >
         {cds?.access || "Public"}
-      </Column>
-      <Column
-        style={{ textAlign: "right" }}
-        onClick={() => {
-          navigate("/connector/" + cds.key);
-        }}
-      >
-        {connector.values?.status?.name === "Approved"
-          ? "Published"
-          : connector.values?.status?.name || ""}
       </Column>
       <Column style={{ textAlign: "right", width: "30px" }}>
         <MenuButtonWrapper>

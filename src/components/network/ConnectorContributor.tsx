@@ -36,36 +36,17 @@ const ConnectorContributor = (props: Props) => {
   const { contributor } = props;
   return contributor ? (
     <Container>
-      {contributor?.[0]?.values?.github_url ? (
-        <a
-          href={contributor?.[0]?.values?.github_url}
-          target="_blank"
-          rel="noreferrer"
-        >
-          {contributor?.[0]?.values?.avatar_url && (
-            <Avatar>
-              <img src={contributor?.[0]?.values?.avatar_url} alt="" />
-            </Avatar>
-          )}
+      <a
+        href={`https://github.com/${contributor}`}
+        target="_blank"
+        rel="noreferrer"
+      >
+        <Avatar>
+          <img src={`https://github.com/${contributor}.png`} alt="" />
+        </Avatar>
 
-          <span>
-            {contributor?.[0]?.values?.name ||
-              contributor?.[0]?.values?.github_username}
-          </span>
-        </a>
-      ) : (
-        <p>
-          {contributor?.[0]?.values?.avatar_url && (
-            <Avatar>
-              <img src={contributor?.[0]?.values?.avatar_url} alt="" />
-            </Avatar>
-          )}
-          <span>
-            {contributor?.[0]?.values?.name ||
-              contributor?.[0]?.values?.github_username}
-          </span>
-        </p>
-      )}
+        <span>{contributor}</span>
+      </a>
     </Container>
   ) : null;
 };

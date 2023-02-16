@@ -75,9 +75,9 @@ const DashboardPage = (props: Props) => {
       ? workspace
       : workspaces.find((ws) => ws.key === workspace);
 
-  useEffect(() => {
+  /*useEffect(() => {
     refreshConnectors();
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps*/
 
   return (
     <Container>
@@ -113,7 +113,6 @@ const DashboardPage = (props: Props) => {
                       <TableHeaderColumn colSpan={2}>NAME</TableHeaderColumn>
                       <TableHeaderColumn>CREATOR</TableHeaderColumn>
                       <TableHeaderColumn>ACCESS</TableHeaderColumn>
-                      <TableHeaderColumn>STATUS</TableHeaderColumn>
                       <TableHeaderColumn></TableHeaderColumn>
                     </tr>
                   </TableHeader>

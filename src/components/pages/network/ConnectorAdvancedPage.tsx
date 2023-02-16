@@ -112,14 +112,14 @@ const ConnectorAdvancedPage = (props: Props) => {
 
   return cds ? (
     <Container>
-      <Title>Edit Connector Source Code</Title>
+      <Title>Connector Source Code</Title>
       <div>
         {cds && (
           <ReactJson
             src={cds}
-            onAdd={(add) => addValue(add.updated_src)}
-            onEdit={(edit) => editValue(edit.updated_src)}
-            onDelete={(edit) => deleteValue(edit.updated_src)}
+            //onAdd={(add) => addValue(add.updated_src)}
+            //onEdit={(edit) => editValue(edit.updated_src)}
+            //onDelete={(edit) => deleteValue(edit.updated_src)}
             theme={"monokai"}
             collapsed={3}
             collapseStringsAfterLength={30}

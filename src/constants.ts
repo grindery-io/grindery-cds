@@ -7,8 +7,7 @@ export const SCREEN = {
 
 export const WORKFLOW_ENGINE_URL = "https://orchestrator.grindery.org";
 
-export const CDS_EDITOR_API_ENDPOINT =
-  "https://nexus-cds-editor-api.herokuapp.com/api";
+export const CDS_EDITOR_API_ENDPOINT = "http://localhost:5000/api/v1";
 
 export const ICONS: { [key: string]: string } = {
   WALLET: "/images/icons/wallet.svg",

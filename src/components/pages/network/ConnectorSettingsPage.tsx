@@ -193,11 +193,16 @@ const ConnectorSettingsPage = (props: Props) => {
                   "Connector will be available for all Grindery Gateway BETA users"
                 }
               />
-              {data.access === "Public" && (
+              {cds.access === "Public" && (
                 <RadioButton
                   label="Public"
                   selected={data.access === "Public"}
-                  onChange={() => {}}
+                  onChange={() => {
+                    setData({
+                      ...data,
+                      access: "Public",
+                    });
+                  }}
                   description={`Connector will be available for all Grindery Gateway users.`}
                 />
               )}

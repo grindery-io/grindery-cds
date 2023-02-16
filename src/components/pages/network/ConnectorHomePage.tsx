@@ -127,12 +127,12 @@ const ConnectorHomePage = (props: Props) => {
           </CardContent>
           <CardCTA>
             <Button
-              disabled={connector?.values?.status?.name === "Published"}
+              disabled={!connector.access || connector.access === "Public"}
               onClick={() => {
                 navigate(`/connector/${id}/publish`);
               }}
             >
-              {connector?.values?.status?.name === "Published"
+              {!connector.access || connector.access === "Public"
                 ? "Published"
                 : "Publish Connector"}
             </Button>

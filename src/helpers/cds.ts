@@ -57,7 +57,7 @@ function abiInputToField(inp) {
   };
 }
 function getFunctionSuffix(abiItem) {
-  const items = [];
+  const items = [] as string[];
   if (abiItem.payable) {
     items.push("payable");
   }
@@ -67,12 +67,11 @@ function getFunctionSuffix(abiItem) {
   if (abiItem.stateMutability === "pure") {
     items.push("pure");
   }
-  if (abiItem.outputs.length) {
+  if (abiItem.outputs?.length) {
     items.push(
-      "returns " +
-        (abiItem.outputs.length === 1
-          ? abiItem.outputs[0].type
-          : abiItem.outputs.map((x) => x.type).join(", "))
+      `returns (${
+        abiItem.outputs.length === 1 ? abiItem.outputs[0].type : abiItem.outputs.map((x) => x.type).join(", ")
+      })`
     );
   }
   if (!items.length) {

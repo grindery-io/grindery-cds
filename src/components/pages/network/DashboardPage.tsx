@@ -118,7 +118,7 @@ const DashboardPage = (props: Props) => {
                   </TableHeader>
                   <tbody>
                     {state.connectors.map((connector) => (
-                      <ConnectorRow connector={connector} key={connector.id} />
+                      <ConnectorRow connector={connector} key={connector.key} />
                     ))}
                   </tbody>
                 </Table>

@@ -248,7 +248,8 @@ const ConnectorSubmission = (props: Props) => {
       cds = await getCDS(
         state.form.entry.abi,
         state.form.entry.name,
-        state.form.entry.icon
+        state.form.entry.icon,
+        state.form.entry.description
       );
     } catch (err: any) {
       setState({

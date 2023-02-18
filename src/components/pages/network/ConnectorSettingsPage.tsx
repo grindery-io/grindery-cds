@@ -156,7 +156,7 @@ const ConnectorSettingsPage = (props: Props) => {
           <CardContent>
             <CardTitle>Connector Access</CardTitle>
             <CardDescription>
-              Who will be able to use your connector in Nexus?
+              Who will be able to use your connector in Grindery Gateway?
             </CardDescription>
             <RadioWrapper>
               <RadioButton

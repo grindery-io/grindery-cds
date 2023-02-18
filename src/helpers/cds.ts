@@ -70,7 +70,9 @@ function getFunctionSuffix(abiItem) {
   if (abiItem.outputs?.length) {
     items.push(
       `returns (${
-        abiItem.outputs.length === 1 ? abiItem.outputs[0].type : abiItem.outputs.map((x) => x.type).join(", ")
+        abiItem.outputs.length === 1
+          ? abiItem.outputs[0].type
+          : abiItem.outputs.map((x) => x.type).join(", ")
       })`
     );
   }
@@ -123,7 +125,7 @@ const convertImgToBase64Wrapper = (url) => {
   });
 };
 
-export const getCDS = async (ABI, name, icon) => {
+export const getCDS = async (ABI, name, icon, description) => {
   let parsedInput = [];
   if (ABI) {
     parsedInput = JSON.parse(ABI);
@@ -236,6 +238,10 @@ export const getCDS = async (ABI, name, icon) => {
     if (isValidHttpUrl(icon)) {
       cds.icon = await convertImgToBase64Wrapper(icon);
     }
+  }
+
+  if (description) {
+    cds.description = description;
   }
 
   return cds;

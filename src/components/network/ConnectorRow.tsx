@@ -6,6 +6,8 @@ import { ICONS } from "../../constants";
 import ConnectorContributor from "./ConnectorContributor";
 import useNetworkContext from "../../hooks/useNetworkContext";
 import Confirm from "./Confirm";
+import useWorkspaceContext from "../../hooks/useWorkspaceContext";
+import useAppContext from "../../hooks/useAppContext";
 
 const Row = styled.tr`
   border: 1px solid #dcdcdc;
@@ -77,7 +79,9 @@ type Props = {
 
 const ConnectorRow = (props: Props) => {
   const { connector } = props;
-  const { deleteConnector } = useNetworkContext();
+  const { user } = useAppContext();
+  const { moveConnector } = useNetworkContext();
+  const { workspace, workspaces } = useWorkspaceContext();
   let navigate = useNavigate();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const cds = connector;
@@ -101,6 +105,14 @@ const ConnectorRow = (props: Props) => {
     navigate(`/clone/${cds.key}?name=${encodeURIComponent(cds.name)}`);
   };
 
+  const handleMoveClick = async (key: string, title: string) => {
+    try {
+      await moveConnector(connector.key, key, title);
+    } catch (error: any) {
+      console.error("handleMoveClick error", error.message || "Unknown error");
+    }
+  };
+
   const menuItems = [
     {
       key: "edit",
@@ -114,6 +126,28 @@ const ConnectorRow = (props: Props) => {
       label: "Clone",
       onClick: handleCloneClick,
     },
+    ...(workspaces && workspaces.length > 1
+      ? [
+          {
+            key: "move",
+            label: "Move to workspace",
+            children: [
+              ...(workspaces || [])
+                .filter((ws) => ws.key !== workspace)
+                .map((ws) => ({
+                  key: ws.key,
+                  label: ws.title,
+                  onClick: () => {
+                    handleMoveClick(
+                      ws.key === "personal" ? user : ws.key,
+                      ws.title
+                    );
+                  },
+                })),
+            ],
+          },
+        ]
+      : []),
   ];
 
   /*if (connector?.values?.status?.name !== "Published") {

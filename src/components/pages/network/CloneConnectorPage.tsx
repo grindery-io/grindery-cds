@@ -101,11 +101,7 @@ const CloneConnectorPage = (props: Props) => {
         return;
       }
     } else {
-      cds = JSON.parse(
-        state.connectors.find(
-          (connector: any) => JSON.parse(connector?.values?.cds)?.key === key
-        )?.values?.cds
-      );
+      cds = state.connectors.find((connector: any) => connector?.key === key);
     }
 
     if (!cds) {

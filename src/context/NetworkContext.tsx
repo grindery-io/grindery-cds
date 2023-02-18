@@ -2,6 +2,7 @@
 import axios from "axios";
 import React, { createContext, useEffect, useReducer } from "react";
 import { useGrinderyNexus } from "use-grindery-nexus";
+import Snackbar from "../components/network/Snackbar";
 import { isLocalOrStaging } from "../constants";
 import useWorkspaceContext from "../hooks/useWorkspaceContext";
 
@@ -20,6 +21,13 @@ type StateProps = {
     url?: string;
     error?: string;
   };
+  snackbar: {
+    opened: boolean;
+    message: string;
+    severity: string;
+    onClose: () => void;
+    duration?: number;
+  };
 };
 
 type ContextProps = {
@@ -28,6 +36,11 @@ type ContextProps = {
   cloneConnector: (cds: any) => Promise<string>;
   connectContributor: (code: string) => void;
   deleteConnector: (key: string) => void;
+  moveConnector: (
+    connectorKey: string,
+    workspaceKey: string,
+    workspacetitle: string
+  ) => void;
 };
 
 type NetworkContextProps = {
@@ -42,6 +55,12 @@ const defaultContext = {
     contributor: {
       loading: true,
     },
+    snackbar: {
+      opened: false,
+      message: "",
+      severity: "",
+      onClose: () => {},
+    },
   },
   refreshConnectors: async () => {
     return { success: false };
@@ -51,6 +70,7 @@ const defaultContext = {
   },
   connectContributor: () => {},
   deleteConnector: () => {},
+  moveConnector: async () => {},
 };
 
 export const NetworkContext = createContext<ContextProps>(defaultContext);
@@ -70,6 +90,12 @@ export const NetworkContextProvider = ({ children }: NetworkContextProps) => {
       blockchains: [],
       contributor: {
         loading: true,
+      },
+      snackbar: {
+        opened: false,
+        message: "",
+        severity: "",
+        onClose: () => {},
       },
     }
   );
@@ -199,6 +225,12 @@ export const NetworkContextProvider = ({ children }: NetworkContextProps) => {
       );
     }
     if (res?.data?.key) {
+      if (res?.data?.connector) {
+        setState({
+          connectors: [...state.connectors, res?.data?.connector],
+        });
+      }
+
       return res.data.key;
     } else {
       throw new Error("Server error. Please, try again later.");
@@ -323,6 +355,96 @@ export const NetworkContextProvider = ({ children }: NetworkContextProps) => {
     }
   };
 
+  const moveConnector = async (
+    connectorKey: string,
+    workspaceKey: string,
+    workspaceTitle: string
+  ) => {
+    const connector = [...state.connectors].find((c) => c.key === connectorKey);
+    if (!connector) {
+      setState({
+        ...state,
+        snackbar: {
+          opened: true,
+          message: "Connector not selected",
+          severity: "error",
+          duration: 5000,
+          onClose: () => {
+            setState({
+              snackbar: {
+                opened: false,
+                message: "",
+                severity: "error",
+                onClose: () => {},
+              },
+            });
+          },
+        },
+      });
+      return;
+    }
+    const updatedConnector = {
+      ...connector,
+      workspace: workspaceKey,
+    };
+    try {
+      await axios.patch(
+        `${CDS_EDITOR_API_ENDPOINT}/cds`,
+        {
+          cds: JSON.stringify(updatedConnector),
+          environment: isLocalOrStaging ? "staging" : "production",
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${workspaceToken || token?.access_token}`,
+          },
+        }
+      );
+    } catch (err: any) {
+      console.error("moveConnector error => ", err.message);
+      setState({
+        ...state,
+        snackbar: {
+          opened: true,
+          message: err.message || "Unexpected error",
+          severity: "error",
+          duration: 5000,
+          onClose: () => {
+            setState({
+              snackbar: {
+                opened: false,
+                message: "",
+                severity: "error",
+                onClose: () => {},
+              },
+            });
+          },
+        },
+      });
+      return;
+    }
+    setState({
+      ...state,
+      connectors: [...state.connectors.filter((c) => c.key !== connectorKey)],
+      snackbar: {
+        opened: true,
+        message: `Connector moved to ${workspaceTitle} workspace`,
+        severity: "success",
+        duration: 5000,
+        onClose: () => {
+          setState({
+            snackbar: {
+              opened: false,
+              message: "",
+              severity: "success",
+              onClose: () => {},
+            },
+          });
+        },
+      },
+    });
+  };
+
   useEffect(() => {
     getContributor();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -346,9 +468,11 @@ export const NetworkContextProvider = ({ children }: NetworkContextProps) => {
         cloneConnector,
         connectContributor,
         deleteConnector,
+        moveConnector,
       }}
     >
       {children}
+      <Snackbar state={{ ...state.snackbar }} />
     </NetworkContext.Provider>
   );
 };

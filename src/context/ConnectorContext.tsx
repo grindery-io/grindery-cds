@@ -6,6 +6,7 @@ import { isLocalOrStaging } from "../constants";
 import { useGrinderyNexus } from "use-grindery-nexus";
 import useWorkspaceContext from "../hooks/useWorkspaceContext";
 import useNetworkContext from "../hooks/useNetworkContext";
+import useAppContext from "../hooks/useAppContext";
 
 export const NOT_ALLOWED = `Published connector can't be updated. You can clone the connector and create a new version.`;
 
@@ -36,7 +37,7 @@ type ContextProps = {
   state: StateProps;
   setState: React.Dispatch<Partial<StateProps>>;
   saveConnector: () => void;
-  publishConnector: () => void;
+  publishConnector: (comment: string) => void;
   onConnectorSettingsSave: (data: any) => void;
   onOperationSettingsSave: (type: any, operation: any) => void;
   onOperationDelete: (type: any, operationKey: string) => void;
@@ -100,6 +101,7 @@ export const ConnectorContextProvider = ({
   children,
   connector,
 }: ConnectorContextProps) => {
+  const { user, userEmail } = useAppContext();
   const { workspaceToken } = useWorkspaceContext();
   const { token } = useGrinderyNexus();
   const { refreshConnectors } = useNetworkContext();
@@ -241,37 +243,23 @@ export const ConnectorContextProvider = ({
     }
   };
 
-  const publishConnector = async () => {
-    /*if (state.connector?.values?.status?.name === "Published") {
-      setState({
-        isSaving: false,
-        snackbar: {
-          opened: true,
-          message: NOT_ALLOWED,
-          severity: "error",
-          duration: 5000,
-          onClose: () => {
-            setState({
-              snackbar: {
-                opened: false,
-                message: "",
-                severity: "error",
-                onClose: () => {},
-              },
-            });
-          },
-        },
-      });
+  const publishConnector = async (comment: string) => {
+    if (!checkStatus()) {
       return;
     }
+
     setState({
       isPublishing: true,
     });
 
     try {
       await axios.post(
-        `${CDS_EDITOR_API_ENDPOINT}/cds/publish/${state.cds.key.toLowerCase()}`,
+        `${CDS_EDITOR_API_ENDPOINT}/cds/publish`,
         {
+          email: userEmail || "",
+          connector_name: state.cds.name || "",
+          connector_key: state.cds.key || "",
+          comment: comment,
           environment: isLocalOrStaging ? "staging" : "production",
         },
         {
@@ -313,20 +301,16 @@ export const ConnectorContextProvider = ({
     setState({
       connector: {
         ...state.connector,
-        values: {
-          ...state.connector.values,
-          status: {
-            ...state.connector.values.status,
-            id: "5",
-            label: "Published",
-            name: "Published",
-          },
-        },
+        submitted: true,
+      },
+      cds: {
+        ...state.cds,
+        submitted: true,
       },
       isPublishing: false,
       snackbar: {
         opened: true,
-        message: `Connector published. It will appear in the workflow builder UI in 2-5 minutes.`,
+        message: `Connector submitted for publishing. It will appear in the app after manual review and approval.`,
         severity: "success",
         duration: 6000,
         onClose: () => {
@@ -340,7 +324,8 @@ export const ConnectorContextProvider = ({
           });
         },
       },
-    });*/
+    });
+    navigate(`/connector/${state.cds.key}`);
   };
 
   const onConnectorSettingsSave = (data: any) => {

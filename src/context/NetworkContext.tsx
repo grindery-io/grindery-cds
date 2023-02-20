@@ -120,8 +120,27 @@ export const NetworkContextProvider = ({ children }: NetworkContextProps) => {
             },
           }
         );
-      } catch (err) {
+      } catch (err: any) {
         console.error("getConnectors error", err);
+        setState({
+          ...state,
+          snackbar: {
+            opened: true,
+            message: err?.message || "Server error, please reload the page.",
+            severity: "error",
+            duration: 5000,
+            onClose: () => {
+              setState({
+                snackbar: {
+                  opened: false,
+                  message: "",
+                  severity: "error",
+                  onClose: () => {},
+                },
+              });
+            },
+          },
+        });
       }
       setState({
         connectors: res?.data?.result || [],
@@ -252,14 +271,28 @@ export const NetworkContextProvider = ({ children }: NetworkContextProps) => {
       );
     } catch (err: any) {
       console.error("getContributor error", err);
+      const error =
+        err?.response?.data?.error ||
+        err?.response?.data?.message ||
+        err?.message ||
+        "Server error";
       setState({
-        contributor: {
-          loading: false,
-          error:
-            err?.response?.data?.error ||
-            err?.response?.data?.message ||
-            err?.message ||
-            "Server error",
+        ...state,
+        snackbar: {
+          opened: true,
+          message: error || "Server error, please reload the page.",
+          severity: "error",
+          duration: 5000,
+          onClose: () => {
+            setState({
+              snackbar: {
+                opened: false,
+                message: "",
+                severity: "error",
+                onClose: () => {},
+              },
+            });
+          },
         },
       });
     }
@@ -446,9 +479,11 @@ export const NetworkContextProvider = ({ children }: NetworkContextProps) => {
   };
 
   useEffect(() => {
-    getContributor();
+    if (workspaceToken || token?.access_token) {
+      getContributor();
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [workspaceToken, token?.access_token]);
 
   useEffect(() => {
     getConnectors(token?.access_token, workspaceToken);

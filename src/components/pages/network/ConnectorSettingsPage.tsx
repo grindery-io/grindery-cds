@@ -97,6 +97,7 @@ const ConnectorSettingsPage = (props: Props) => {
     description: cds.description || "",
     icon: cds.icon || "",
     access: cds.access || "",
+    version: cds.version || "1.0.0",
   });
   const [error, setError] = useState({ type: "", text: "" });
 
@@ -119,6 +120,23 @@ const ConnectorSettingsPage = (props: Props) => {
           placeholder="Connector name"
           singleLine
           error={error.type === "name" ? error.text : ""}
+        />
+        <RichInput
+          options={[]}
+          value={data.version}
+          onChange={(value: string) => {
+            setError({ type: "", text: "" });
+            setData({
+              ...data,
+              version: value,
+            });
+          }}
+          required
+          label="Connector Version"
+          placeholder="1.0.0"
+          singleLine
+          tooltip="Use semantic versioning: https://semver.org/"
+          error={error.type === "version" ? error.text : ""}
         />
         <MaxHeightInput>
           <RichInput
@@ -178,6 +196,7 @@ const ConnectorSettingsPage = (props: Props) => {
                       }</strong> workspace`
                     : "Only you will be able to use Connector"
                 }
+                disabled={cds.access === "Public"}
               />
 
               <RadioButton
@@ -192,6 +211,7 @@ const ConnectorSettingsPage = (props: Props) => {
                 description={
                   "Connector will be available for all Grindery Gateway BETA users"
                 }
+                disabled={cds.access === "Public"}
               />
               {cds.access === "Public" && (
                 <RadioButton

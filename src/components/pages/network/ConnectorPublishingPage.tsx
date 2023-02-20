@@ -1,6 +1,6 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import { Dialog, CircularProgress } from "grindery-ui";
+import { RichInput, Dialog, CircularProgress } from "grindery-ui";
 import Button from "../../network/Button";
 import useConnectorContext from "../../../hooks/useConnectorContext";
 import RadioButton from "../../network/RadioButton";
@@ -102,10 +102,11 @@ const PublishingText = styled.p`
 `;
 
 const NotValidMessage = styled.p`
-  font-size: 16px;
-  margin: 20px 0;
+  font-size: 14px;
   text-align: left;
   color: #ff5858;
+  margin: 10px 0 0;
+  padding: 0;
 
   & span {
     color: inherit;
@@ -125,6 +126,7 @@ const ConnectorPublishingPage = (props: Props) => {
   const isValid = cds && cds.name && cds.key && cds.icon;
   const hasTriggers = cds.triggers && cds.triggers.length > 0;
   const hasActions = cds.actions && cds.actions.length > 0;
+  const [comment, setComment] = useState("");
 
   useEffect(() => {
     if (!cds?.access) {
@@ -144,144 +146,76 @@ const ConnectorPublishingPage = (props: Props) => {
       <div>
         <Card>
           <CardContent>
-            <CardTitle>Connector Access</CardTitle>
-            <CardDescription>
-              Who will be able to use your connector in Nexus?
-            </CardDescription>
-            <RadioWrapper>
-              <RadioButton
-                label="Private"
-                selected={cds?.access === "Private"}
-                onChange={() => {
-                  setState({
-                    cds: {
-                      ...state.cds,
-                      access: "Private",
-                    },
-                  });
-                }}
-                description="Only you will be able to use Connector"
-              />
-
-              {workspace !== "personal" && (
-                <RadioButton
-                  label="Workspace"
-                  selected={cds?.access === "Workspace"}
-                  onChange={() => {
-                    setState({
-                      cds: {
-                        ...state.cds,
-                        access: "Workspace",
-                      },
-                    });
-                  }}
-                  description={`Connector will be available for all members of <strong>${
-                    workspaces?.find((ws: any) => ws.key === workspace)
-                      ?.title || ""
-                  }</strong> workspace`}
-                />
-              )}
-
-              {/*<RadioButton
-                label="Public"
-                selected={!cds?.access || cds?.access === "Public"}
-                onChange={() => {
-                  setState({
-                    cds: {
-                      ...state.cds,
-                      access: "Public",
-                    },
-                  });
-                }}
-                description="Connector will be available for all Nexus users"
-              />*/}
-            </RadioWrapper>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent>
-            <CardTitle>Connector Summary</CardTitle>
-            <CardDescription>
-              Review Connector details before publishing.
-            </CardDescription>
-            <ConnectorDetails>
-              <Table>
-                <tbody>
-                  <tr>
-                    <td>Name</td>
-                    <td>{cds.name}</td>
-                  </tr>
-                  <tr>
-                    <td>Description</td>
-                    <td>{cds.description || ""}</td>
-                  </tr>
-                  <tr>
-                    <td>Access</td>
-                    <td>{cds?.access || "Public"}</td>
-                  </tr>
-                  {state.connector?.values?.contract_address && (
-                    <tr>
-                      <td>Smart-contract address</td>
-                      <td>{state.connector?.values?.contract_address}</td>
-                    </tr>
-                  )}
-                  <tr>
-                    <td>Number of triggers</td>
-                    <td>{(cds.triggers || []).length}</td>
-                  </tr>
-                  <tr>
-                    <td>Number of actions</td>
-                    <td>{(cds.actions || []).length}</td>
-                  </tr>
-                </tbody>
-              </Table>
-            </ConnectorDetails>
-          </CardContent>
-        </Card>
-        {!isValid ? (
-          <NotValidMessage>
-            Please, configure connector before publishing.{" "}
-            <span
-              onClick={() => {
-                navigate(`/connector/${id}/settings`);
-              }}
-            >
-              Settings
-            </span>{" "}
-            is a good place to start.
-          </NotValidMessage>
-        ) : (
-          <>
-            {!hasTriggers && !hasActions && (
+            <CardTitle>Publish connector</CardTitle>
+            {!isValid ? (
               <NotValidMessage>
-                Please, add at least one{" "}
+                Please, configure connector before publishing.{" "}
                 <span
                   onClick={() => {
-                    navigate(`/connector/${id}`);
+                    navigate(`/connector/${id}/settings`);
                   }}
                 >
-                  trigger or action
+                  Settings
                 </span>{" "}
-                before publishing.
+                is a good place to start.
               </NotValidMessage>
+            ) : (
+              <>
+                {!hasTriggers && !hasActions ? (
+                  <NotValidMessage>
+                    Please, add at least one{" "}
+                    <span
+                      onClick={() => {
+                        navigate(`/connector/${id}`);
+                      }}
+                    >
+                      trigger or action
+                    </span>{" "}
+                    before publishing.
+                  </NotValidMessage>
+                ) : (
+                  <>
+                    <CardDescription>
+                      Your connector will be manually reviewed and approved
+                      before publishing.
+                    </CardDescription>
+                    <CardDescription>
+                      Published Connector will be avaialble for all users of
+                      Grindery Web3 Gateway app.
+                    </CardDescription>
+                    <CardDescription>
+                      You can add a comment for our moderators. Please, add any
+                      relevant information on how to test the connector.
+                    </CardDescription>
+                    <br />
+                    <RichInput
+                      label="Comment"
+                      options={[]}
+                      value={comment}
+                      onChange={(value: string) => {
+                        setComment(value);
+                      }}
+                    />
+                    <Button
+                      style={{ marginTop: "5px" }}
+                      onClick={() => {
+                        publishConnector(comment);
+                      }}
+                      disabled={
+                        !isValid ||
+                        (!hasTriggers && !hasActions) ||
+                        state.isPublishing ||
+                        connector?.access === "Public"
+                      }
+                    >
+                      {connector?.access === "Public" ? "Published" : "Submit"}
+                    </Button>
+                  </>
+                )}
+              </>
             )}
-          </>
-        )}
-        <Button
-          onClick={() => {
-            publishConnector();
-          }}
-          disabled={
-            !isValid ||
-            (!hasTriggers && !hasActions) ||
-            state.isPublishing ||
-            connector?.values?.status?.name === "Published"
-          }
-        >
-          {connector?.values?.status?.name === "Published"
-            ? "Published"
-            : "Publish Connector"}
-        </Button>
+          </CardContent>
+        </Card>
 
         <Dialog open={state.isPublishing} onClose={() => {}} maxWidth={"350px"}>
           <div
@@ -294,7 +228,7 @@ const ConnectorPublishingPage = (props: Props) => {
           >
             <CircularProgress color="inherit" />
           </div>
-          <PublishingText>Publishing...</PublishingText>
+          <PublishingText>Submitting...</PublishingText>
         </Dialog>
       </div>
     </div>

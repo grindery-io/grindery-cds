@@ -211,6 +211,14 @@ const ConnectorRow = (props: Props) => {
       >
         {cds?.access || "Public"}
       </Column>
+      <Column
+        style={{ textAlign: "right" }}
+        onClick={() => {
+          navigate("/connector/" + cds.key);
+        }}
+      >
+        {cds?.version || "1.0.0"}
+      </Column>
       <Column style={{ textAlign: "right", width: "30px" }}>
         <MenuButtonWrapper>
           <IconButton onClick={handleMenuOpen} icon={ICONS.DOTS_HORIZONTAL} />

@@ -113,6 +113,7 @@ const DashboardPage = (props: Props) => {
                       <TableHeaderColumn colSpan={2}>NAME</TableHeaderColumn>
                       <TableHeaderColumn>CREATOR</TableHeaderColumn>
                       <TableHeaderColumn>ACCESS</TableHeaderColumn>
+                      <TableHeaderColumn>VERSION</TableHeaderColumn>
                       <TableHeaderColumn></TableHeaderColumn>
                     </tr>
                   </TableHeader>

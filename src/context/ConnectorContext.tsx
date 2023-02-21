@@ -2,15 +2,13 @@ import React, { createContext, useEffect, useReducer, useState } from "react";
 import axios from "axios";
 import _ from "lodash";
 import { useNavigate } from "react-router";
-import { isLocalOrStaging } from "../constants";
+import { CDS_EDITOR_API_ENDPOINT, isLocalOrStaging } from "../constants";
 import { useGrinderyNexus } from "use-grindery-nexus";
 import useWorkspaceContext from "../hooks/useWorkspaceContext";
 import useNetworkContext from "../hooks/useNetworkContext";
 import useAppContext from "../hooks/useAppContext";
 
 export const NOT_ALLOWED = `Published connector can't be updated. You can clone the connector and create a new version.`;
-
-const CDS_EDITOR_API_ENDPOINT = "http://localhost:5000/api/v1";
 
 type StateProps = {
   id: string;

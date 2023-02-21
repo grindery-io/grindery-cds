@@ -81,9 +81,9 @@ const OperationSettings = (props: Props) => {
     state: { blockchains },
   } = useNetworkContext();
   const chains = blockchains.map((chain) => ({
-    value: chain.id,
-    label: chain.values.name || "",
-    id: chain.values.chain_id,
+    value: chain.value,
+    label: chain.label || "",
+    id: chain.value,
   }));
 
   const chain =

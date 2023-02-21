@@ -105,7 +105,7 @@ const NotValidMessage = styled.p`
   font-size: 14px;
   text-align: left;
   color: #ff5858;
-  margin: 10px 0 0;
+  margin: 10px 0 10px;
   padding: 0;
 
   & span {
@@ -147,7 +147,28 @@ const ConnectorPublishingPage = (props: Props) => {
         <Card>
           <CardContent>
             <CardTitle>Publish connector</CardTitle>
-            {!isValid ? (
+            <CardDescription>
+              Your connector will be manually reviewed and approved before
+              publishing.
+            </CardDescription>
+            <CardDescription>
+              Published Connector will be avaialble for all users of Grindery
+              Web3 Gateway app.
+            </CardDescription>
+            <CardDescription>
+              You can add a comment for our moderators. Please, add any relevant
+              information on how to test the connector.
+            </CardDescription>
+            <br />
+            <RichInput
+              label="Comment"
+              options={[]}
+              value={comment}
+              onChange={(value: string) => {
+                setComment(value);
+              }}
+            />
+            {!isValid && (
               <NotValidMessage>
                 Please, configure connector before publishing.{" "}
                 <span
@@ -159,61 +180,34 @@ const ConnectorPublishingPage = (props: Props) => {
                 </span>{" "}
                 is a good place to start.
               </NotValidMessage>
-            ) : (
-              <>
-                {!hasTriggers && !hasActions ? (
-                  <NotValidMessage>
-                    Please, add at least one{" "}
-                    <span
-                      onClick={() => {
-                        navigate(`/connector/${id}`);
-                      }}
-                    >
-                      trigger or action
-                    </span>{" "}
-                    before publishing.
-                  </NotValidMessage>
-                ) : (
-                  <>
-                    <CardDescription>
-                      Your connector will be manually reviewed and approved
-                      before publishing.
-                    </CardDescription>
-                    <CardDescription>
-                      Published Connector will be avaialble for all users of
-                      Grindery Web3 Gateway app.
-                    </CardDescription>
-                    <CardDescription>
-                      You can add a comment for our moderators. Please, add any
-                      relevant information on how to test the connector.
-                    </CardDescription>
-                    <br />
-                    <RichInput
-                      label="Comment"
-                      options={[]}
-                      value={comment}
-                      onChange={(value: string) => {
-                        setComment(value);
-                      }}
-                    />
-                    <Button
-                      style={{ marginTop: "5px" }}
-                      onClick={() => {
-                        publishConnector(comment);
-                      }}
-                      disabled={
-                        !isValid ||
-                        (!hasTriggers && !hasActions) ||
-                        state.isPublishing ||
-                        connector?.access === "Public"
-                      }
-                    >
-                      {connector?.access === "Public" ? "Published" : "Submit"}
-                    </Button>
-                  </>
-                )}
-              </>
             )}
+            {!hasTriggers && !hasActions && (
+              <NotValidMessage>
+                Please, add at least one{" "}
+                <span
+                  onClick={() => {
+                    navigate(`/connector/${id}`);
+                  }}
+                >
+                  trigger or action
+                </span>{" "}
+                before publishing.
+              </NotValidMessage>
+            )}
+            <Button
+              style={{ marginTop: "5px" }}
+              onClick={() => {
+                publishConnector(comment);
+              }}
+              disabled={
+                !isValid ||
+                (!hasTriggers && !hasActions) ||
+                state.isPublishing ||
+                connector?.access === "Public"
+              }
+            >
+              {connector?.access === "Public" ? "Published" : "Submit"}
+            </Button>
           </CardContent>
         </Card>
 

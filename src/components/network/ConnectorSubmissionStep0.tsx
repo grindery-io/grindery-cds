@@ -52,10 +52,10 @@ const ConnectorSubmissionStep0 = (props: Props) => {
   } = useNetworkContext();
   const chains = _.orderBy(
     blockchains.map((chain) => ({
-      value: chain.id,
-      label: chain.values.name || "",
-      icon: chain.values.icon || "",
-      id: chain.values.chain_id,
+      value: chain.value,
+      label: chain.label || "",
+      icon: chain.icon || "",
+      id: chain.value,
     })),
     [(chain: any) => chain.label?.toLowerCase()],
     ["asc"]

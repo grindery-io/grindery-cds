@@ -81,10 +81,10 @@ const ConnectorSubmission = (props: Props) => {
   const { token } = useGrinderyNexus();
   const { workspaceToken } = useWorkspaceContext();
   const chains = blockchains.map((chain) => ({
-    value: chain.id,
-    label: chain.values.name || "",
-    icon: chain.values.icon || "",
-    id: chain.values.chain_id,
+    value: chain.value,
+    label: chain.label || "",
+    icon: chain.icon || "",
+    id: chain.value,
   }));
 
   const isEVM =

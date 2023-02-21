@@ -3,10 +3,8 @@ import axios from "axios";
 import React, { createContext, useEffect, useReducer } from "react";
 import { useGrinderyNexus } from "use-grindery-nexus";
 import Snackbar from "../components/network/Snackbar";
-import { isLocalOrStaging } from "../constants";
+import { CDS_EDITOR_API_ENDPOINT, isLocalOrStaging } from "../constants";
 import useWorkspaceContext from "../hooks/useWorkspaceContext";
-
-const CDS_EDITOR_API_ENDPOINT = "http://localhost:5000/api/v1";
 
 type StateProps = {
   connectors: any[];
@@ -124,6 +122,7 @@ export const NetworkContextProvider = ({ children }: NetworkContextProps) => {
         console.error("getConnectors error", err);
         setState({
           ...state,
+          connectorsLoading: false,
           snackbar: {
             opened: true,
             message: err?.message || "Server error, please reload the page.",
@@ -141,6 +140,7 @@ export const NetworkContextProvider = ({ children }: NetworkContextProps) => {
             },
           },
         });
+        return;
       }
       setState({
         connectors: res?.data?.result || [],
@@ -275,14 +275,19 @@ export const NetworkContextProvider = ({ children }: NetworkContextProps) => {
         err?.response?.data?.error ||
         err?.response?.data?.message ||
         err?.message ||
-        "Server error";
+        "Server error, please reload the page.";
       setState({
         ...state,
+        contributor: {
+          ...state.contributor,
+          loading: false,
+          error: error || "Server error, please reload the page.",
+        },
         snackbar: {
           opened: true,
           message: error || "Server error, please reload the page.",
           severity: "error",
-          duration: 5000,
+          duration: 10000,
           onClose: () => {
             setState({
               snackbar: {
@@ -295,6 +300,7 @@ export const NetworkContextProvider = ({ children }: NetworkContextProps) => {
           },
         },
       });
+      return;
     }
 
     setState({
@@ -486,9 +492,11 @@ export const NetworkContextProvider = ({ children }: NetworkContextProps) => {
   }, [workspaceToken, token?.access_token]);
 
   useEffect(() => {
-    getConnectors(token?.access_token, workspaceToken);
+    if (state.contributor.id && (token?.access_token || workspaceToken)) {
+      getConnectors(token?.access_token, workspaceToken);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [token?.access_token, workspaceToken]);
+  }, [token?.access_token, workspaceToken, state.contributor.id]);
 
   useEffect(() => {
     getChains(token?.access_token);

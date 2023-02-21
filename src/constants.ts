@@ -368,11 +368,11 @@ export const isLocalOrStaging =
   window.location.hostname === "nexus-staging.grindery.org" ||
   window.location.hostname === "network-staging.grindery.org";
 
-export const CDS_EDITOR_API_ENDPOINT = isLocalOrStaging
+/*export const CDS_EDITOR_API_ENDPOINT = isLocalOrStaging
   ? "http://localhost:5000/api/v1"
-  : "https://nexus-cds-editor-api.herokuapp.com/api/v1";
-/*export const CDS_EDITOR_API_ENDPOINT =
-  "https://nexus-cds-editor-api.herokuapp.com/api/v1";*/
+  : "https://nexus-cds-editor-api.herokuapp.com/api/v1";*/
+export const CDS_EDITOR_API_ENDPOINT =
+  "https://nexus-cds-editor-api.herokuapp.com/api/v1";
 
 export const GRINDERY_APPS = [
   {

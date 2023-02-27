@@ -83,6 +83,23 @@ const ConnectorHomePage = (props: Props) => {
         </Card>
         <Card>
           <CardContent>
+            <CardTitle>Authentication</CardTitle>
+            <CardDescription>
+              Set up connector authentication, if required.
+            </CardDescription>
+          </CardContent>
+          <CardCTA>
+            <Button
+              onClick={() => {
+                navigate(`/connector/${id}/authentication`);
+              }}
+            >
+              Set Up Authentication
+            </Button>
+          </CardCTA>
+        </Card>
+        <Card>
+          <CardContent>
             <CardTitle>Triggers</CardTitle>
             <CardDescription>
               Help users to catch new data as soon as it is available. Triggers

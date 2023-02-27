@@ -141,6 +141,20 @@ const ConnectorDrawer = (props: Props) => {
             <li>
               <span
                 className={
+                  location.pathname === `/connector/${id}/authentication`
+                    ? "active"
+                    : ""
+                }
+                onClick={() => {
+                  naigate(`/connector/${id}/authentication`);
+                }}
+              >
+                Authentication
+              </span>
+            </li>
+            <li>
+              <span
+                className={
                   location.pathname === `/connector/${id}/triggers`
                     ? "active"
                     : ""

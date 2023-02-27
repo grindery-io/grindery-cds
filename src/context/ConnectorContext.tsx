@@ -37,6 +37,7 @@ type ContextProps = {
   saveConnector: () => void;
   publishConnector: (comment: string) => void;
   onConnectorSettingsSave: (data: any) => void;
+  onConnectorAuthenticationSave: (data: any) => void;
   onOperationSettingsSave: (type: any, operation: any) => void;
   onOperationDelete: (type: any, operationKey: string) => void;
   onInputFieldSave: (
@@ -85,6 +86,7 @@ const defaultContext = {
   saveConnector: () => {},
   publishConnector: () => {},
   onConnectorSettingsSave: () => {},
+  onConnectorAuthenticationSave: () => {},
   onOperationSettingsSave: () => {},
   onOperationDelete: () => {},
   onInputFieldSave: () => {},
@@ -621,6 +623,41 @@ export const ConnectorContextProvider = ({
     });
   };
 
+  const onConnectorAuthenticationSave = (data: any) => {
+    if (!checkStatus()) {
+      return;
+    }
+
+    if (data) {
+      const newCDS = {
+        ...cds,
+      };
+      if (data && data.type && data.type === "none") {
+        if (newCDS.authentication) {
+          delete newCDS.authentication;
+        }
+
+        setState({
+          cds: {
+            ...newCDS,
+          },
+        });
+      } else {
+        setState({
+          cds: {
+            ...newCDS,
+            authentication: {
+              ...data,
+            },
+          },
+        });
+      }
+
+      showSuccess("Connector saved");
+      navigate(`/connector/${state.id}`);
+    }
+  };
+
   useEffect(() => {
     setCount((count) => count + 1);
     saveConnector();
@@ -645,6 +682,7 @@ export const ConnectorContextProvider = ({
         onInputFieldDelete,
         onOutputFieldSave,
         onOutputFieldDelete,
+        onConnectorAuthenticationSave,
       }}
     >
       {children}

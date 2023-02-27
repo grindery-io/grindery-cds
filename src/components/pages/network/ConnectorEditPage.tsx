@@ -13,6 +13,7 @@ import ConnectorAdvancedPage from "./ConnectorAdvancedPage";
 import ConnectorPublishingPage from "./ConnectorPublishingPage";
 import SnackbarProvider from "../../network/SnackbarProvider";
 import ConfirmProvider from "../../network/ConfirmProvider";
+import ConnectorAuthenticationPage from "./ConnectorAuthenticationPage";
 
 const Container = styled.div`
   margin-left: 305px;
@@ -57,6 +58,10 @@ const ConnectorEditPage = (props: Props) => {
               <Routes>
                 <Route path="/" element={<ConnectorHomePage />}></Route>
                 <Route path="settings" element={<ConnectorSettingsPage />} />
+                <Route
+                  path="authentication"
+                  element={<ConnectorAuthenticationPage />}
+                />
                 <Route path="publish" element={<ConnectorPublishingPage />} />
                 <Route path="advanced" element={<ConnectorAdvancedPage />} />
                 <Route

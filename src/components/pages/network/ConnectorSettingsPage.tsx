@@ -6,6 +6,7 @@ import useConnectorContext from "../../../hooks/useConnectorContext";
 import IconField from "../../network/IconField";
 import RadioButton from "../../network/RadioButton";
 import useWorkspaceContext from "../../../hooks/useWorkspaceContext";
+import { useNavigate } from "react-router";
 
 const Title = styled.h3`
   font-weight: 700;
@@ -38,6 +39,12 @@ const ButtonsWrapper = styled.div`
 
 const ButtonsRight = styled.div`
   margin-left: auto;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
+  flex-wrap: nowrap;
+  gap: 10px;
 `;
 
 const Card = styled.div`
@@ -91,7 +98,8 @@ type Props = {};
 const ConnectorSettingsPage = (props: Props) => {
   const { state, onConnectorSettingsSave } = useConnectorContext();
   const { workspaces, workspace } = useWorkspaceContext();
-  const { cds } = state;
+  let navigate = useNavigate();
+  const { cds, id } = state;
   const [data, setData] = useState({
     name: cds.name || "",
     description: cds.description || "",
@@ -232,6 +240,18 @@ const ConnectorSettingsPage = (props: Props) => {
 
         <ButtonsWrapper>
           <ButtonsRight>
+            <Button
+              style={{
+                padding: "11px 24px",
+                background: "none",
+                border: "1px solid #0b0d17",
+              }}
+              onClick={() => {
+                navigate(`/connector/${id}`);
+              }}
+            >
+              Cancel
+            </Button>
             <Button
               onClick={() => {
                 setError({ type: "", text: "" });

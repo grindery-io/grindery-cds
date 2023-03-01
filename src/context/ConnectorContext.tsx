@@ -325,6 +325,7 @@ export const ConnectorContextProvider = ({
         },
       },
     });
+
     navigate(`/connector/${state.cds.key}`);
   };
 
@@ -338,6 +339,7 @@ export const ConnectorContextProvider = ({
         cds: {
           ...state.cds,
           name: data.name,
+          version: data.version || "1.0.0",
           icon: data.icon,
           description: data.description,
           access: data.access,

@@ -371,8 +371,7 @@ export const isLocalOrStaging =
 /*export const CDS_EDITOR_API_ENDPOINT = isLocalOrStaging
   ? "http://localhost:5000/api/v1"
   : "https://nexus-cds-editor-api.herokuapp.com/api/v1";*/
-export const CDS_EDITOR_API_ENDPOINT =
-  "https://nexus-cds-editor-api.herokuapp.com/api/v1";
+export const CDS_EDITOR_API_ENDPOINT = "https://cds-editor.grindery.org/api/v1";
 
 export const GRINDERY_APPS = [
   {

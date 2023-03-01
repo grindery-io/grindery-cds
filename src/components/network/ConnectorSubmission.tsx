@@ -116,7 +116,7 @@ const ConnectorSubmission = (props: Props) => {
       setState({
         error: {
           type: "blockchain",
-          text: "Blockchain field is required",
+          text: "Blockchain is required",
         },
       });
       return;
@@ -125,7 +125,7 @@ const ConnectorSubmission = (props: Props) => {
       setState({
         error: {
           type: "contract",
-          text: "Smart-contract address field is required",
+          text: "Smart-contract address is required",
         },
       });
 
@@ -215,7 +215,7 @@ const ConnectorSubmission = (props: Props) => {
       setState({
         error: {
           type: "username",
-          text: "Username field is required",
+          text: "Username is required",
         },
       });
       return;
@@ -224,7 +224,16 @@ const ConnectorSubmission = (props: Props) => {
       setState({
         error: {
           type: "name",
-          text: "Connector name field is required",
+          text: "Connector name is required",
+        },
+      });
+      return;
+    }
+    if (state.form.entry.name.length < 3) {
+      setState({
+        error: {
+          type: "name",
+          text: "Connector name must be at least 3 characters long",
         },
       });
       return;
@@ -233,7 +242,7 @@ const ConnectorSubmission = (props: Props) => {
       setState({
         error: {
           type: "icon",
-          text: "Connector icon field is required",
+          text: "Connector icon is required",
         },
       });
 

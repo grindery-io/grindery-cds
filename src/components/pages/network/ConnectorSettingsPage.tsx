@@ -103,6 +103,8 @@ const ConnectorSettingsPage = (props: Props) => {
   const [data, setData] = useState({
     name: cds.name || "",
     description: cds.description || "",
+    triggersDescription: cds.triggersDescription || "",
+    actionsDescription: cds.actionsDescription || "",
     icon: cds.icon || "",
     access: cds.access || "",
     version: cds.version || "1.0.0",
@@ -161,6 +163,40 @@ const ConnectorSettingsPage = (props: Props) => {
             tooltip="A sentence describing your connector in 140 characters or less"
             placeholder=""
             error={error.type === "description" ? error.text : ""}
+          />
+        </MaxHeightInput>
+        <MaxHeightInput>
+          <RichInput
+            options={[]}
+            value={data.triggersDescription}
+            onChange={(value: string) => {
+              setError({ type: "", text: "" });
+              setData({
+                ...data,
+                triggersDescription: value,
+              });
+            }}
+            label="Triggers Description"
+            tooltip="Short user-friendly triggers description. Must start with `Triggers when` and end with a dot."
+            placeholder=""
+            error={error.type === "triggersDescription" ? error.text : ""}
+          />
+        </MaxHeightInput>
+        <MaxHeightInput>
+          <RichInput
+            options={[]}
+            value={data.actionsDescription}
+            onChange={(value: string) => {
+              setError({ type: "", text: "" });
+              setData({
+                ...data,
+                actionsDescription: value,
+              });
+            }}
+            label="Actions Description"
+            tooltip="Short user-friendly actions description."
+            placeholder=""
+            error={error.type === "actionsDescription" ? error.text : ""}
           />
         </MaxHeightInput>
         <IconField
@@ -262,10 +298,25 @@ const ConnectorSettingsPage = (props: Props) => {
                   });
                   return;
                 }
+                if (data.name && data.name.length < 3) {
+                  setError({
+                    type: "name",
+                    text: "Connector name must be at least 3 characters long",
+                  });
+                  return;
+                }
                 if (!data.icon) {
                   setError({
                     type: "icon",
                     text: "Connector Icon is required",
+                  });
+                  return;
+                }
+                var regex = new RegExp(/\.$/);
+                if (data.triggersDescription && (!data.triggersDescription.startsWith("Triggers when") || !data.triggersDescription.match(regex))) {
+                  setError({
+                    type: "triggersDescription",
+                    text: "Must start with `Triggers when` and end with a dot.",
                   });
                   return;
                 }

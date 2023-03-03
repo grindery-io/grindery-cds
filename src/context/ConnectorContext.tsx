@@ -342,6 +342,8 @@ export const ConnectorContextProvider = ({
           version: data.version || "1.0.0",
           icon: data.icon,
           description: data.description,
+          triggersDescription: data.triggersDescription || "",
+          actionsDescription: data.actionsDescription || "",
           access: data.access,
         },
       });

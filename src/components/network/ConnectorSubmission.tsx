@@ -2,7 +2,7 @@ import React, { useEffect, useReducer } from "react";
 import axios from "axios";
 import styled from "styled-components";
 import { CircularProgress } from "grindery-ui";
-import { getCDS } from "../../helpers/cds";
+//import { getCDS } from "../../helpers/cds";
 import ConnectorSubmissionProgress from "./ConnectorSubmissionProgress";
 import ConnectorSubmissionStep1 from "./ConnectorSubmissionStep1";
 import ConnectorSubmissionStep0 from "./ConnectorSubmissionStep0";
@@ -254,11 +254,25 @@ const ConnectorSubmission = (props: Props) => {
     let cds: any;
 
     try {
-      cds = await getCDS(
+      /*cds = await getCDS(
         state.form.entry.abi,
         state.form.entry.name,
         state.form.entry.icon,
         state.form.entry.description
+      );*/
+      cds = await axios.post(
+        `${CDS_EDITOR_API_ENDPOINT}/cds/convert`,
+        {
+          abi: state.form.entry.abi,
+          name: state.form.entry.name,
+          icon: state.form.entry.icon,
+          description: state.form.entry.description,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${workspaceToken || token?.access_token}`,
+          },
+        }
       );
     } catch (err: any) {
       setState({
@@ -280,14 +294,14 @@ const ConnectorSubmission = (props: Props) => {
       });
       return;
     }
-    if (cds) {
+    if (cds && cds.result) {
       setState({
         loading: false,
         form: {
           ...state.form,
           entry: {
             ...state.form.entry,
-            cds: JSON.stringify(cds, null, 2),
+            cds: JSON.stringify(cds.result, null, 2),
           },
         },
       });

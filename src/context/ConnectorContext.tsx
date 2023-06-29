@@ -101,7 +101,7 @@ export const ConnectorContextProvider = ({
   children,
   connector,
 }: ConnectorContextProps) => {
-  const { user, userEmail } = useAppContext();
+  const { userEmail } = useAppContext();
   const { workspaceToken } = useWorkspaceContext();
   const { token } = useGrinderyNexus();
   const { refreshConnectors } = useNetworkContext();

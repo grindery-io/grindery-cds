@@ -146,7 +146,9 @@ const ConnectorSubmissionStep2 = (props: Props) => {
           </Button>
         </ButtonWrapper>
         <ButtonWrapper>
-          <Button onClick={onSubmit}>Continue</Button>
+          <Button disabled={state.loading} onClick={onSubmit}>
+            {state.loading ? "Loading..." : "Continue"}
+          </Button>
         </ButtonWrapper>
       </ButtonsWrapper>
     </Container>

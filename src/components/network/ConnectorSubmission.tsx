@@ -295,14 +295,14 @@ const ConnectorSubmission = (props: Props) => {
       });
       return;
     }
-    if (cds && cds.result) {
+    if (cds?.data?.result) {
       setState({
         loading: false,
         form: {
           ...state.form,
           entry: {
             ...state.form.entry,
-            cds: JSON.stringify(cds.result, null, 2),
+            cds: JSON.stringify(cds.data.result, null, 2),
           },
         },
       });

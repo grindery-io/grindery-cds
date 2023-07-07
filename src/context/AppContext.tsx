@@ -15,7 +15,7 @@ import { validator } from "../helpers/validator";
 import { Operation } from "../types/Workflow";
 import useWorkspaceContext from "../hooks/useWorkspaceContext";
 import { Chain } from "../types/Chain";
-import { sendTwitterConversion } from "../components/utils/twitterTracking";
+import { sendTwitterConversion } from "../utils/twitterTracking";
 
 type ContextProps = {
   user: any;

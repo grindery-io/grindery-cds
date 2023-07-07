@@ -95,23 +95,6 @@ const ConnectorSubmissionStep2 = (props: Props) => {
         error={state.error.type === "name" ? state.error.text : ""}
       />
 
-      <RichInput
-        label="Connector Description"
-        placeholder="Short description for your Connector"
-        onChange={(value: string) => {
-          setState({
-            error: { type: "", text: "" },
-            form: {
-              ...state.form,
-              entry: { ...state.form.entry, description: value },
-            },
-          });
-        }}
-        value={state.form.entry.description}
-        options={[]}
-        error={state.error.type === "description" ? state.error.text : ""}
-      />
-
       <IconField
         label="Connector Icon"
         onChange={(value: string) => {

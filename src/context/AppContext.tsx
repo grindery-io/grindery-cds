@@ -326,10 +326,6 @@ export const AppContextProvider = ({ children }: AppContextProps) => {
     setVerifying(false);
   };
 
-  const addExecutions = useCallback((newItems: WorkflowExecutionLog[]) => {
-    setWorkflowExecutions((items) => [...items, newItems]);
-  }, []);
-
   const getApps = (workflowsList: Workflow[], connectorsList: Connector[]) => {
     if (workflowsList && workflowsList.length > 0) {
       const usedConnectorsKeys = _.uniq(

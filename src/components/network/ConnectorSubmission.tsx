@@ -8,7 +8,11 @@ import ConnectorSubmissionStep1 from "./ConnectorSubmissionStep1";
 import ConnectorSubmissionStep0 from "./ConnectorSubmissionStep0";
 import ConnectorSubmissionStep2 from "./ConnectorSubmissionStep2";
 import ConnectorSubmissionLoading from "./ConnectorSubmissionLoading";
-import { CDS_EDITOR_API_ENDPOINT, isLocalOrStaging } from "../../constants";
+import {
+  CDS_EDITOR_API_ENDPOINT,
+  DEFAULT_ICON,
+  isLocalOrStaging,
+} from "../../constants";
 import useNetworkContext from "../../hooks/useNetworkContext";
 import { useGrinderyNexus } from "use-grindery-nexus";
 import useWorkspaceContext from "../../hooks/useWorkspaceContext";
@@ -238,7 +242,7 @@ const ConnectorSubmission = (props: Props) => {
       });
       return;
     }
-    if (!state.form.entry.icon) {
+    /*if (!state.form.entry.icon) {
       setState({
         error: {
           type: "icon",
@@ -247,7 +251,7 @@ const ConnectorSubmission = (props: Props) => {
       });
 
       return;
-    }
+    }*/
 
     setState({ loading: true });
 
@@ -265,7 +269,7 @@ const ConnectorSubmission = (props: Props) => {
         {
           abi: state.form.entry.abi,
           name: state.form.entry.name,
-          icon: state.form.entry.icon,
+          icon: state.form.entry.icon || DEFAULT_ICON,
           enhancedByOpenAI: true,
           batchSizeOpenAI: 20,
         },

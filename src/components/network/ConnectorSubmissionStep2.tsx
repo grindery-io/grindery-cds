@@ -109,7 +109,6 @@ const ConnectorSubmissionStep2 = (props: Props) => {
         value={state.form.entry.icon}
         error={state.error.type === "icon" ? state.error.text : ""}
         tooltip="Recommended icon size 24x24px. Allowed formats: PNG or SVG. Must be on transparent background."
-        required
       />
 
       {state.error.type === "cds" && <Error>{state.error.text}</Error>}

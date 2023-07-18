@@ -271,7 +271,7 @@ const ConnectorSubmission = (props: Props) => {
           name: state.form.entry.name,
           icon: state.form.entry.icon || DEFAULT_ICON,
           enhancedByOpenAI: true,
-          batchSizeOpenAI: 20,
+          batchSizeOpenAI: 5,
         },
         {
           headers: {

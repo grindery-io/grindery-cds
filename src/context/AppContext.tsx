@@ -15,8 +15,6 @@ import { validator } from "../helpers/validator";
 import { Operation } from "../types/Workflow";
 import useWorkspaceContext from "../hooks/useWorkspaceContext";
 import { Chain } from "../types/Chain";
-import { sendTwitterConversion } from "../utils/twitterTracking";
-import { sendGoogleEvent } from "../utils/googleTracking";
 
 type ContextProps = {
   user: any;
@@ -473,17 +471,6 @@ export const AppContextProvider = ({ children }: AppContextProps) => {
       }
     }
   }, [workspaceToken, token]);
-
-  useEffect(() => {
-    if (user) {
-      sendGoogleEvent({
-        event: "registration",
-        authentication_method: "wallet",
-        user_id: user,
-      });
-      sendTwitterConversion("tw-ofep3-ofep7");
-    }
-  }, [user]);
 
   return (
     <AppContext.Provider

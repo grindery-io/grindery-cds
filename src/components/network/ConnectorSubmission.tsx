@@ -14,7 +14,7 @@ import {
   isLocalOrStaging,
 } from "../../constants";
 import useNetworkContext from "../../hooks/useNetworkContext";
-import { useGrinderyNexus } from "use-grindery-nexus";
+import { useGrinderyLogin } from "use-grindery-login";
 import useWorkspaceContext from "../../hooks/useWorkspaceContext";
 import { useNavigate } from "react-router-dom";
 
@@ -82,7 +82,7 @@ const ConnectorSubmission = (props: Props) => {
     }
   );
 
-  const { token } = useGrinderyNexus();
+  const { token } = useGrinderyLogin();
   const { workspaceToken } = useWorkspaceContext();
   const chains = blockchains.map((chain) => ({
     value: chain.value,

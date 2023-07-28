@@ -6,7 +6,7 @@ import { GRINDERY_APPS, ICONS } from "../../constants";
 import useAppContext from "../../hooks/useAppContext";
 import UserMenu from "../shared/UserMenu";
 import WorkspaceSelector from "../shared/WorkspaceSelector";
-import { useGrinderyNexus } from "use-grindery-nexus";
+import { useGrinderyLogin } from "use-grindery-login";
 
 const Container = styled.div`
   padding: 1.5px 25px;
@@ -136,7 +136,7 @@ const NetworkHeader = (props: Props) => {
   let navigate = useNavigate();
   let location = useLocation();
   const { user } = useAppContext();
-  const { connect } = useGrinderyNexus();
+  const { connect } = useGrinderyLogin();
 
   return (
     <Container>

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { Snackbar, Dialog } from "grindery-ui";
 import { ICONS } from "../../constants";
-import { useGrinderyNexus } from "use-grindery-nexus";
+import { useGrinderyLogin } from "use-grindery-login";
 import useAppContext from "../../hooks/useAppContext";
 
 const Container = styled.div`
@@ -261,7 +261,7 @@ type Props = {
 };
 
 const AccountModal = (props: Props) => {
-  const { address } = useGrinderyNexus();
+  const { address } = useGrinderyLogin();
   const { client, disconnect, userEmail, setUserEmail } = useAppContext();
   const { open, onClose } = props;
   const [view, setView] = useState("account_edit");

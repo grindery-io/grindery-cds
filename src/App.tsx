@@ -1,6 +1,6 @@
 import React from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import GrinderyNexusContextProvider from "use-grindery-nexus";
+import GrinderyLoginProvider from "use-grindery-login";
 import { ThemeProvider } from "grindery-ui";
 import WorkspaceContextProvider from "./context/WorkspaceContext";
 import AppContextProvider from "./context/AppContext";
@@ -11,7 +11,7 @@ import NetworkStack from "./components/pages/network/NetworkStack";
 function App() {
   return (
     <ThemeProvider>
-      <GrinderyNexusContextProvider>
+      <GrinderyLoginProvider>
         <BrowserRouter>
           <WorkspaceContextProvider>
             <AppContextProvider>
@@ -23,7 +23,7 @@ function App() {
             </AppContextProvider>
           </WorkspaceContextProvider>
         </BrowserRouter>
-      </GrinderyNexusContextProvider>
+      </GrinderyLoginProvider>
     </ThemeProvider>
   );
 }

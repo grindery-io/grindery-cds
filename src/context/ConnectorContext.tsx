@@ -3,7 +3,7 @@ import axios from "axios";
 import _ from "lodash";
 import { useNavigate } from "react-router";
 import { CDS_EDITOR_API_ENDPOINT, isLocalOrStaging } from "../constants";
-import { useGrinderyNexus } from "use-grindery-nexus";
+import { useGrinderyLogin } from "use-grindery-login";
 import useWorkspaceContext from "../hooks/useWorkspaceContext";
 import useNetworkContext from "../hooks/useNetworkContext";
 import useAppContext from "../hooks/useAppContext";
@@ -103,7 +103,7 @@ export const ConnectorContextProvider = ({
 }: ConnectorContextProps) => {
   const { userEmail } = useAppContext();
   const { workspaceToken } = useWorkspaceContext();
-  const { token } = useGrinderyNexus();
+  const { token } = useGrinderyLogin();
   const { refreshConnectors } = useNetworkContext();
   let navigate = useNavigate();
   const [count, setCount] = useState(0);

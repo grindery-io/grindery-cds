@@ -15,7 +15,6 @@ function App() {
         <BrowserRouter>
           <WorkspaceContextProvider>
             <AppContextProvider>
-              <EarlyAccessModal />
               <Routes>
                 <Route path="/github/auth" element={<AuthPage />}></Route>
                 <Route path="*" element={<NetworkStack />} />

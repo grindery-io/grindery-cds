@@ -1,17 +1,29 @@
 import React from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import GrinderyLoginProvider from "use-grindery-login";
-import { ThemeProvider } from "grindery-ui";
+import { ThemeProvider, CircularProgress } from "grindery-ui";
 import WorkspaceContextProvider from "./context/WorkspaceContext";
 import AppContextProvider from "./context/AppContext";
-import EarlyAccessModal from "./components/shared/EarlyAccessModal";
 import AuthPage from "./components/pages/AuthPage";
 import NetworkStack from "./components/pages/network/NetworkStack";
 
 function App() {
   return (
     <ThemeProvider>
-      <GrinderyLoginProvider>
+      <GrinderyLoginProvider
+        loader={
+          <div
+            style={{
+              textAlign: "center",
+              color: "#ffb930",
+              width: "100%",
+              margin: "50px 0",
+            }}
+          >
+            <CircularProgress color="inherit" />
+          </div>
+        }
+      >
         <BrowserRouter>
           <WorkspaceContextProvider>
             <AppContextProvider>

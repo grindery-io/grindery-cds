@@ -7,7 +7,7 @@
 Grindery CDS allows you to create, clone and edit Nexus platform
 connectors.
 
-Live URL: [https://network.grindery.org/](https://network.grindery.org/)
+Live URL: [https://network.grindery.com/](https://network.grindery.com/)
 
 ## Development
 

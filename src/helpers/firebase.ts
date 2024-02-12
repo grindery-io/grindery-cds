@@ -34,7 +34,7 @@ onMessage(messaging, (payload) => {
       "",
     icon:
       (payload.data && payload.data.icon) ||
-      "https://nexus.grindery.org/logo192.png",
+      "https://app.grindery.com/logo192.png",
     data: {
       url: (payload.data && payload.data.url) || "",
     },

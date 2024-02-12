@@ -172,7 +172,7 @@ const EarlyAccessModal = (props: Props) => {
     setLoading(true);
     setError("");
     const res = await client
-      ?.requestEarlyAccess(email, "network.grindery.org", "Requested to CDS")
+      ?.requestEarlyAccess(email, "network.grindery.com", "Requested to CDS")
       .catch((err) => {
         console.error(
           "or_requestEarlyAccess error",
@@ -255,7 +255,7 @@ const EarlyAccessModal = (props: Props) => {
                   </a>{" "}
                   and{" "}
                   <a
-                    href="https://www.grindery.io/privacy"
+                    href="https://www.grindery.com/privacy"
                     target="_blank"
                     rel="noreferrer"
                   >

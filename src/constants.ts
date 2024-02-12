@@ -5,7 +5,7 @@ export const SCREEN = {
   DESKTOP_XL: "1600px",
 };
 
-export const WORKFLOW_ENGINE_URL = "https://orchestrator.grindery.org";
+export const WORKFLOW_ENGINE_URL = "https://orchestrator.grindery.com";
 
 export const ICONS: { [key: string]: string } = {
   WALLET: "/images/icons/wallet.svg",
@@ -365,35 +365,37 @@ export const HS_FORM_ID = "80ae7474-b232-4eb8-bad7-a4b2d651d643";
 export const isLocalOrStaging =
   window.location.hostname === "localhost" ||
   window.location.hostname === "127.0.0.1" ||
-  window.location.hostname === "nexus-staging.grindery.org" ||
-  window.location.hostname === "network-staging.grindery.org";
+  window.location.hostname === "nexus-staging.grindery.com" ||
+  window.location.hostname === "network-staging.grindery.com" ||
+  window.location.hostname === "nexus-staging.grindery.io" ||
+  window.location.hostname === "network-staging.grindery.io";
 
 /*export const CDS_EDITOR_API_ENDPOINT = isLocalOrStaging
   ? "http://localhost:5000/api/v1"
   : "https://nexus-cds-editor-api.herokuapp.com/api/v1";*/
-export const CDS_EDITOR_API_ENDPOINT = "https://cds-editor.grindery.org/api/v1";
+export const CDS_EDITOR_API_ENDPOINT = "https://cds-editor.grindery.com/api/v1";
 
 export const GRINDERY_APPS = [
   {
-    url: "https://flow.grindery.org/",
+    url: "https://flow.grindery.com/",
     name: "Flow",
     description: "Create workflows witn no-code",
     target: "_blank",
   },
   {
-    url: "https://ping.grindery.org/",
+    url: "https://ping.grindery.com/",
     name: "Ping",
     description: "Receive blockchain notifications",
     target: "_blank",
   },
   {
-    url: "https://gateway.grindery.org/",
+    url: "https://gateway.grindery.com/",
     name: "Gateway",
     description: "Your gateway to web3 no-code",
     target: "_blank",
   },
   {
-    url: "https://network.grindery.org/",
+    url: "https://network.grindery.com/",
     name: "CDS",
     description: "Create Connector Description Schema files",
     target: "_blank",

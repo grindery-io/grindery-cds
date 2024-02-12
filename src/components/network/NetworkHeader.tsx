@@ -171,7 +171,7 @@ const NetworkHeader = (props: Props) => {
             <Link
               onClick={() => {
                 window.open(
-                  "https://docs.grindery.org/18-od-buxPOERx51kvaZeGDm2v0oYSrw1/SDK-Documentation",
+                  "https://docs.grindery.com/18-od-buxPOERx51kvaZeGDm2v0oYSrw1/SDK-Documentation",
                   "_blank"
                 );
               }}

@@ -74,7 +74,7 @@ const defaultContext = {
 export const NetworkContext = createContext<ContextProps>(defaultContext);
 
 export const NetworkContextProvider = ({ children }: NetworkContextProps) => {
-  const { workspaceToken, workspace } = useWorkspaceContext();
+  const { workspaceToken } = useWorkspaceContext();
   const { token } = useGrinderyLogin();
 
   const [state, setState] = useReducer(

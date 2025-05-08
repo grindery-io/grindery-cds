@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import styled from "styled-components";
 import { CircularProgress } from "grindery-ui";
 import useNetworkContext from "../../../hooks/useNetworkContext";
@@ -68,7 +68,7 @@ type Props = {};
 
 const DashboardPage = (props: Props) => {
   let navigate = useNavigate();
-  const { state, refreshConnectors } = useNetworkContext();
+  const { state } = useNetworkContext();
   const { workspace, workspaces } = useWorkspaceContext();
   const currentWorkspace =
     workspace === "personal"

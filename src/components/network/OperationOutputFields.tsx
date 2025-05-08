@@ -3,7 +3,6 @@ import styled from "styled-components";
 import Button from "./Button";
 import useConnectorContext from "../../hooks/useConnectorContext";
 import { useNavigate, useParams } from "react-router";
-import OperationInputFieldRow from "./OperationInputFieldRow";
 import OperationOutputFieldRow from "./OperationOutputFieldRow";
 
 const Table = styled.table`

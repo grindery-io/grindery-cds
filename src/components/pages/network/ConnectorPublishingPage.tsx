@@ -3,8 +3,6 @@ import styled from "styled-components";
 import { RichInput, Dialog, CircularProgress } from "grindery-ui";
 import Button from "../../network/Button";
 import useConnectorContext from "../../../hooks/useConnectorContext";
-import RadioButton from "../../network/RadioButton";
-import useWorkspaceContext from "../../../hooks/useWorkspaceContext";
 import { useNavigate } from "react-router";
 
 const Title = styled.h3`
@@ -51,50 +49,6 @@ const CardDescription = styled.p`
   color: #898989;
 `;
 
-const RadioWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
-  justify-content: flex-start;
-  flex-wrap: nowrap;
-  gap: 4px;
-  margin-top: 10px;
-  margin-bottom: 5px;
-`;
-
-const ConnectorDetails = styled.div`
-  margin-top: 10px;
-
-  & p {
-    margin: 0 0 8px;
-    padding: 0;
-  }
-`;
-
-const Table = styled.table`
-  width: 100%;
-  border-collapse: collapse;
-  border: none;
-
-  & tbody tr {
-    border-bottom: 1px solid #dcdcdc;
-
-    & td {
-      padding: 10px;
-    }
-
-    & td:first-child {
-      width: 30%;
-      padding-left: 0;
-      font-size: 14px;
-    }
-
-    &:last-child {
-      border-bottom: none;
-    }
-  }
-`;
-
 const PublishingText = styled.p`
   margin: 0 0 20px;
   padding: 0;
@@ -121,7 +75,6 @@ const ConnectorPublishingPage = (props: Props) => {
   const { state, setState, publishConnector } = useConnectorContext();
   let navigate = useNavigate();
   const { connector, cds } = state;
-  const { workspaces, workspace } = useWorkspaceContext();
   const { id } = state;
   const isValid = cds && cds.name && cds.key && cds.icon;
   const hasTriggers = cds.triggers && cds.triggers.length > 0;

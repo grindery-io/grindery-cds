@@ -85,12 +85,12 @@ const ConnectorRow = (props: Props) => {
   let navigate = useNavigate();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const cds = connector;
-  const [confirm, setConfirm] = useState({
+  const confirm = {
     message: "",
     opened: false,
     onClose: () => {},
     onConfirm: () => {},
-  });
+  };
 
   const handleMenuClose = () => {
     setAnchorEl(null);

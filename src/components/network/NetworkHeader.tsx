@@ -1,8 +1,7 @@
 import React from "react";
 import { useLocation, useNavigate } from "react-router";
 import styled from "styled-components";
-import { AppsMenu } from "grindery-ui";
-import { GRINDERY_APPS, ICONS } from "../../constants";
+import { ICONS } from "../../constants";
 import useAppContext from "../../hooks/useAppContext";
 import UserMenu from "../shared/UserMenu";
 import WorkspaceSelector from "../shared/WorkspaceSelector";
